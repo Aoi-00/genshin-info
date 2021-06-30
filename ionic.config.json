@@ -1,0 +1,8 @@
+{
+  "name": "GenshinInfo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "6953ea0a"
+}
