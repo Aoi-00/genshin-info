@@ -20,10 +20,6 @@ function getParamName(label: string, occurence: number) {
     }
     return label.substring(index, index + 6);
 }
-
-let testString = "Charged Attack DMG|{param6:F1P}+{param7:F1P}";
-//console.log(getParamName(testString, 1));
-// console.log(getParamName(testString, 2));
 function getParamList(testString: string) {
     var result = [];
     var i = 1;
@@ -35,13 +31,29 @@ function getParamList(testString: string) {
         }
     }
     while (getParamName(testString, i) !== undefined);
-    //console.log(result)
     return result;
+}
+function FilterText(arr: any) {
+    let result = [];
+    for (var i in arr) {
+        var val = arr[i];
+        for (var j in val) {
+            var sub_key = j;
+            var sub_val = val[j];
+            var name = sub_key.split("|")
+            var Json = { name: name[0], dmg: sub_val }
+            result.push(Json)
+        }
+    }
+    return result
 }
 
 
 const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
     const [talents, setTalents] = useState<any>();
+    const [combat1, setCombat1] = useState(Array());
+    const [combat2, setCombat2] = useState(Array());
+    const [combat3, setCombat3] = useState(Array());
     const [talentLvl, setTalentLvl] = useState(1);
     useEffect(() => {
         if (char.length !== 0 && Object.keys(attribute).length !== 0) {
@@ -52,7 +64,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
                 //console.log(talentDetails[stat])
                 for (var label of talentDetails[stat].attributes.labels) {
                     if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
-                        
+
                         let Params = getParamList(label)
                         let values = [];
                         for (const param of Params) {
@@ -65,8 +77,10 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
 
             }
             if (talents !== allTalents) {
-                setTalents(allTalents);
-                console.log(talents)
+                setCombat1(FilterText(allTalents.combat1))
+                setCombat2(FilterText(allTalents.combat2))
+                setCombat3(FilterText(allTalents.combat3))
+                console.log(combat1)
             }
         }
     }, [char])
@@ -75,43 +89,25 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
         if (char.length !== 0 && Object.keys(attribute).length !== 0) {
             let tempTalents: { [key: string]: any } = {};
             for (const stat in talents) {
-                for (const each of talents[stat]){
+                for (const each of talents[stat]) {
                     //label = label.replaceAll(":F1P", "").replaceAll(":P", "").replaceAll(":F2P", "").replaceAll(":I", "").replaceAll(":F1", "")
                     let Params = getParamList(Object.keys(each)[0])
                     console.log(Object.keys(each)[0], Params, Object.values(each))
-                    
+
                 }
             }
 
         }
     }, [talentLvl, char])
-
     return (
         <div>
             <IonCard>
                 <IonCardContent>
-
-                    {
-                        talents !== undefined && Object.keys(talents).map((eachkey) => {
-                            //console.log(talents[eachkey])
-                            return (
-                                <div>
-                                    <h2>{eachkey}</h2>
-                                    {talents[eachkey].map((each: any) => {
-                                        //console.log(Object.keys(each), Object.values(each))
-                                        return (
-                                            <div>
-                                                <h3>{Object.keys(each)} : </h3>
-                                            </div>
-                                        )
-
-                                    })}
-                                    <hr />
-                                </div>
-                            )
-                        })
-                    }
-
+                    {combat1 && combat1.map(x => x.dmg.map((z:any) => {
+                        return(
+                            <p key={x.name}> {x.name}: {z[0]}</p>
+                        )
+                    }))}
                 </IonCardContent>
             </IonCard>
         </div>

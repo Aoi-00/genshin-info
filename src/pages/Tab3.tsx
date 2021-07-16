@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonLabel, IonInput, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
 import { Component, useState } from 'react';
 
 import ExploreContainer from '../components/ExploreContainer';
@@ -11,9 +11,10 @@ const genshin = require("genshin_panel");
 class Tab3 extends Component {
 
   state = {
+    level: "1",
     attr: {}
   }
-
+ 
   componentDidMount() {
     let art1 = new genshin.ArtifactBuilder()
       .setName("crimsonWitch")      // 如雷的盛怒
@@ -77,9 +78,14 @@ class Tab3 extends Component {
       attr: test
     })
   }
-
+  handleChange = (e: any) => {
+    this.setState({
+      [e.target.id] : e.target.value
+    })
+  }
 
   render() {
+    console.log(this.state)
     return (
       <IonPage>
         <IonHeader>
@@ -95,6 +101,9 @@ class Tab3 extends Component {
           </IonHeader>
 
           <Talents char={"Bennett"} attribute={this.state.attr} />
+          <IonItem>
+            <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>
+          </IonItem>
 
           {/* <ExploreContainer name="Tab 3 page" /> */}
         </IonContent>
