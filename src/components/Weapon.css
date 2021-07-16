@@ -1,0 +1,24 @@
+.weaponSelect {
+    max-width: 70% !important;
+}
+
+.row {
+    max-width          : 100%;
+    display        : inline-block;
+    flex-direction : row;
+    justify-content: center;
+}
+
+.block {
+    display:inline-flex;
+    margin-right: 0em;
+    margin-left: 1em;
+}
+
+ion-label{
+    padding-top: 0.7em;
+}
+
+h3 {
+    padding-top: 0.7em;
+}

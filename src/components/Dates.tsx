@@ -16,15 +16,15 @@ const Dates: React.FC<ContainerProps> = ({ handleChange, date }) => {
                     <IonLabel>Today</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="Monday">
-                    <IonLabel>Mon</IonLabel>
+                    <IonLabel>Mon/Thurs</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="Tuesday">
-                    <IonLabel>Tues</IonLabel>
+                    <IonLabel>Tues/Fri</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="Wednesday">
-                    <IonLabel>Wed</IonLabel>
+                    <IonLabel>Wed/Sat</IonLabel>
                 </IonSegmentButton>
-                <IonSegmentButton value="Thursday">
+                {/* <IonSegmentButton value="Thursday">
                     <IonLabel>Thurs</IonLabel>
                 </IonSegmentButton>
                 <IonSegmentButton value="Friday">
@@ -32,7 +32,7 @@ const Dates: React.FC<ContainerProps> = ({ handleChange, date }) => {
                 </IonSegmentButton>
                 <IonSegmentButton value="Saturday">
                     <IonLabel>Sat</IonLabel>
-                </IonSegmentButton>
+                </IonSegmentButton> */}
                 <IonSegmentButton value="Sunday">
                     <IonLabel>Sun</IonLabel>
                 </IonSegmentButton>

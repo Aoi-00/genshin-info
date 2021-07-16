@@ -1,10 +1,6 @@
-//import './ExploreContainer.css';
-
-import { IonRow, IonCol, IonChip, IonAvatar, IonLabel, IonImg, IonText, IonItem, IonGrid } from "@ionic/react";
+import { IonRow, IonCol, IonChip, IonAvatar, IonLabel, IonImg,IonGrid } from "@ionic/react";
 
 const genshindb = require('genshin-db');
-
-//To wait for updated pic fix
 
 interface ContainerProps {
     date: string;
@@ -35,9 +31,11 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
     })
     let talentMatData: any[] = [];
     talentMat && talentMat.map((each) => {
-        each.forEach((item: any) => {
-            talentMatData.push(item);
-        })
+        return (
+            each.forEach((item: any) => {
+                talentMatData.push(item);
+            })
+        )
     })
     weaponMatResults && weaponMatResults.map((each: any[]) => {
         return (
@@ -62,7 +60,7 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
                 {
                     talentMatData && talentMatData.map((each) => {
                         return (
-                            <IonCol size="6" >
+                            <IonCol key={each.name} size="6" >
                                 <IonChip>
                                     <IonAvatar>
                                         <IonImg src={each.images.fandom} />
@@ -85,7 +83,7 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
                 {
                     weaponMat && weaponMat.map((each: any) => {
                         return (
-                            <IonCol size="6" >
+                            <IonCol key={each.name} size="6" >
                                 <IonChip>
                                     <IonAvatar>
                                         <IonImg src={each.images.fandom} />  
