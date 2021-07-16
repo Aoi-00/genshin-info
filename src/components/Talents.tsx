@@ -46,7 +46,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
     useEffect(() => {
         if (char.length !== 0 && Object.keys(attribute).length !== 0) {
             let talentDetails: { [key: string]: any } = genshindb.talents(char)
-            //keqing, name, level, has ascended, const NOTE: has to add 50% base cdmg and 5%CR
             let allTalents: { [key: string]: any } = {};
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []
@@ -110,13 +109,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
                                     <hr />
                                 </div>
                             )
-                            // return (
-                            //     <IonRow>
-                            //         <IonIcon icon={wifi} slot="start" />
-                            //         <IonLabel>{eachkey}</IonLabel>
-                            //         <IonLabel>Multipliers: {talents[eachkey][0][14]}</IonLabel>
-                            //     </IonRow>
-                            // )
                         })
                     }
 
