@@ -1,6 +1,7 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Switch, Route } from 'react-router-dom';
 import {
   IonApp,
+  IonAvatar,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
@@ -9,10 +10,13 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
+import { ellipse, map, people, square, triangle } from 'ionicons/icons';
+import team from './assets/party-setup.jpg';
 import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
+import Character from './pages/Character';
 import Tab3 from './pages/Tab3';
+import Map from './pages/Map';
+import Teams from './pages/Teams';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -38,31 +42,38 @@ const App: React.FC = () => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/tab1">
-            <Tab1 />
-          </Route>
-          <Route exact path="/tab2">
-            <Tab2 />
-          </Route>
-          <Route path="/tab3">
-            <Tab3 />
-          </Route>
-          <Route exact path="/">
-            <Redirect to="/tab1" />
-          </Route>
+          <Switch>
+          <Route exact path="/tab1" component={Tab1} />
+          <Redirect exact from="/" to="/tab1"  />
+          <Route exact path="/tab2" component={Character}/>
+          
+          <Route exact path="/tab3" component={Tab3}/>
+
+          <Route exact path="/map" component={Map}/>
+
+          <Route exact path="/teams" component={Teams}/>
+          <Route exact path="/teams/:teamid/:id" component={Character}/>
+
+          <Route render={() => <h1>Not Found</h1>} />
+          </Switch>
         </IonRouterOutlet>
+
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
             <IonIcon icon={triangle} />
             <IonLabel>Tab 1</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/tab2">
-            <IonIcon icon={ellipse} />
-            <IonLabel>Character</IonLabel>
+          <IonTabButton tab="tab2" href="/teams">
+            <IonIcon icon={people}> </IonIcon>
+            <IonLabel>Teams</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab3" href="/tab3">
             <IonIcon icon={square} />
             <IonLabel>Tab 3</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="map" href="/map">
+            <IonIcon icon={map} />
+            <IonLabel>Map</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

@@ -1,5 +1,4 @@
 import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonItem, IonIcon, IonLabel, IonButton, IonCol, IonRow } from "@ionic/react";
-import { pin, wifi, wine, warning, walk } from "ionicons/icons";
 import { useEffect, useState } from "react";
 
 const genshin = require("genshin_panel");
@@ -9,6 +8,7 @@ interface ContainerProps {
 
     char: any;
     attribute: any;
+    
 }
 
 function getParamName(label: string, occurence: number) {
@@ -40,7 +40,7 @@ function FilterText(arr: any) {
         for (var j in val) {
             var sub_key = j;
             var sub_val = val[j];
-            var name = sub_key.split("|")
+            var name = sub_key.split("|") //name[1] will be format of dmg nums
             var Json = { name: name[0], dmg: sub_val }
             result.push(Json)
         }
@@ -81,29 +81,37 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
                 setCombat2(FilterText(allTalents.combat2))
                 setCombat3(FilterText(allTalents.combat3))
                 console.log(combat1)
+                console.log(combat2)
+                console.log(combat3)
             }
         }
     }, [char])
 
-    useEffect(() => {
-        if (char.length !== 0 && Object.keys(attribute).length !== 0) {
-            let tempTalents: { [key: string]: any } = {};
-            for (const stat in talents) {
-                for (const each of talents[stat]) {
-                    //label = label.replaceAll(":F1P", "").replaceAll(":P", "").replaceAll(":F2P", "").replaceAll(":I", "").replaceAll(":F1", "")
-                    let Params = getParamList(Object.keys(each)[0])
-                    console.log(Object.keys(each)[0], Params, Object.values(each))
+    // useEffect(() => {
+    //     if (char.length !== 0 && Object.keys(attribute).length !== 0) {
+    //         let tempTalents: { [key: string]: any } = {};
+    //         for (const stat in talents) {
+    //             for (const each of talents[stat]) {
+    //                 //label = label.replaceAll(":F1P", "").replaceAll(":P", "").replaceAll(":F2P", "").replaceAll(":I", "").replaceAll(":F1", "")
+    //                 let Params = getParamList(Object.keys(each)[0])
+    //                 console.log(Object.keys(each)[0], Params, Object.values(each))
 
-                }
-            }
+    //             }
+    //         }
 
-        }
-    }, [talentLvl, char])
+    //     }
+    // }, [talentLvl, char])
+
+    useEffect(()=>{
+        console.log("mounted")
+        console.log(combat1,combat2,combat3)
+    })
     return (
         <div>
             <IonCard>
                 <IonCardContent>
                     {combat1 && combat1.map(x => x.dmg.map((z:any) => {
+                        console.log(z)
                         return(
                             <p key={x.name}> {x.name}: {z[0]}</p>
                         )
