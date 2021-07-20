@@ -13,7 +13,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { ellipse, map, people, square, triangle } from 'ionicons/icons';
 import team from './assets/party-setup.jpg';
 import Tab1 from './pages/Tab1';
-import Character from './pages/Character';
+import Build from './pages/Build';
 import Tab3 from './pages/Tab3';
 import Map from './pages/Map';
 import Teams from './pages/Teams';
@@ -45,14 +45,14 @@ const App: React.FC = () => (
           <Switch>
           <Route exact path="/tab1" component={Tab1} />
           <Redirect exact from="/" to="/tab1"  />
-          <Route exact path="/tab2" component={Character}/>
+         
           
           <Route exact path="/tab3" component={Tab3}/>
 
           <Route exact path="/map" component={Map}/>
 
           <Route exact path="/teams" component={Teams}/>
-          <Route exact path="/teams/:teamid/:id" component={Character}/>
+          <Route exact path="/teams/:teamid/:id" component={Build}/>
 
           <Route render={() => <h1>Not Found</h1>} />
           </Switch>

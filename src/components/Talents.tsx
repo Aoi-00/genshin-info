@@ -1,4 +1,4 @@
-import { IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCardContent, IonItem, IonIcon, IonLabel, IonButton, IonCol, IonRow } from "@ionic/react";
+import { IonCard, IonCardContent, } from "@ionic/react";
 import { useEffect, useState } from "react";
 
 const genshin = require("genshin_panel");
@@ -8,7 +8,8 @@ interface ContainerProps {
 
     char: any;
     attribute: any;
-    
+    level: string;
+
 }
 
 function getParamName(label: string, occurence: number) {
@@ -18,7 +19,7 @@ function getParamName(label: string, occurence: number) {
         if (index === -1) return undefined;
         occurence--;
     }
-    return label.substring(index, index + 6);
+    return label.substring(index, index + 7).replace(":", "");
 }
 function getParamList(testString: string) {
     var result = [];
@@ -34,37 +35,77 @@ function getParamList(testString: string) {
     return result;
 }
 function FilterText(arr: any) {
-    let result = [];
+    let result: { name: string; dmg: any; }[] = [];
     for (var i in arr) {
         var val = arr[i];
-        for (var j in val) {
-            var sub_key = j;
-            var sub_val = val[j];
-            var name = sub_key.split("|") //name[1] will be format of dmg nums
-            var Json = { name: name[0], dmg: sub_val }
-            result.push(Json)
-        }
+        //console.log(val)
+        //let Json: {name: any; dmg:[]} ;
+        var label = Object.keys(val)[0].split("|");
+        FormatNumber(label[1], Object.values(val)[0])
+        var Json = { name: label[0], dmg: Object.values(val)[0] }
+        result.push(Json)
+
+        // for (var j in val) {
+        //     var sub_key = j;
+        //     var sub_val = val[j];
+
+        //     var name = sub_key.split("|") //name[1] will be format of dmg nums
+
+        //     FormatNumber(name[1], sub_val)
+        //     var Json = { name: name[0], dmg: sub_val }
+        //     //Json = { name: name[0], dmg: sub_val }
+        //     result.push(Json)
+        // }
     }
+    //console.log(result)
     return result
 }
 
 
-const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
-    const [talents, setTalents] = useState<any>();
+
+function FormatNumber(format: string, number: any) {
+    var result: any = format.match(/{.+?}/g)
+    //console.log(result,number)
+    for (var i in result) {
+        //console.log(result[i],number[i])
+        if (result[i].includes(":P")) {
+            number[i] = number[i].map((x: number) => (x * 100).toFixed(1))
+            //console.log(number[i])
+        }
+        else if (result[i].includes(":F1P")) {
+            number[i] = number[i].map((x: number) => Number((x * 100).toFixed(1)))
+        }
+        else if (result[i].includes(":F2P")) {
+            number[i] = number[i].map((x: number) => Number((x * 100).toFixed(2)))
+        }
+        else if (result[i].includes(":I")) {
+            number[i] = number[i].map((x: number) => Math.round(x))
+        }
+    }
+    //FormatResult(format, number)
+}
+
+// function FormatResult(format:string, number:any){
+//     var result : any = format.match(/{.+?}/g)
+//     for (var i in result){
+//         console.log(result[i],number[level])
+//     }
+// }
+
+const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     const [combat1, setCombat1] = useState(Array());
     const [combat2, setCombat2] = useState(Array());
     const [combat3, setCombat3] = useState(Array());
     const [talentLvl, setTalentLvl] = useState(1);
     useEffect(() => {
+        //console.log(char)
         if (char.length !== 0 && Object.keys(attribute).length !== 0) {
             let talentDetails: { [key: string]: any } = genshindb.talents(char)
             let allTalents: { [key: string]: any } = {};
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []
-                //console.log(talentDetails[stat])
                 for (var label of talentDetails[stat].attributes.labels) {
                     if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
-
                         let Params = getParamList(label)
                         let values = [];
                         for (const param of Params) {
@@ -74,48 +115,65 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute }) => {
                     }
                 }
                 allTalents[stat] = talentMultiplier
-
             }
-            if (talents !== allTalents) {
-                setCombat1(FilterText(allTalents.combat1))
-                setCombat2(FilterText(allTalents.combat2))
-                setCombat3(FilterText(allTalents.combat3))
-                console.log(combat1)
-                console.log(combat2)
-                console.log(combat3)
-            }
+            setCombat1(FilterText(allTalents.combat1))
+            setCombat2(FilterText(allTalents.combat2))
+            setCombat3(FilterText(allTalents.combat3))
+            // console.log(combat1)
+            // console.log(combat2)
+            // console.log(combat3)
         }
-    }, [char])
+    }, [char, level])
 
-    // useEffect(() => {
-    //     if (char.length !== 0 && Object.keys(attribute).length !== 0) {
-    //         let tempTalents: { [key: string]: any } = {};
-    //         for (const stat in talents) {
-    //             for (const each of talents[stat]) {
-    //                 //label = label.replaceAll(":F1P", "").replaceAll(":P", "").replaceAll(":F2P", "").replaceAll(":I", "").replaceAll(":F1", "")
-    //                 let Params = getParamList(Object.keys(each)[0])
-    //                 console.log(Object.keys(each)[0], Params, Object.values(each))
-
-    //             }
-    //         }
-
-    //     }
-    // }, [talentLvl, char])
-
-    useEffect(()=>{
-        console.log("mounted")
-        console.log(combat1,combat2,combat3)
-    })
-    return (
+    return ( //key={x.name}
         <div>
             <IonCard>
                 <IonCardContent>
-                    {combat1 && combat1.map(x => x.dmg.map((z:any) => {
-                        console.log(z)
-                        return(
-                            <p key={x.name}> {x.name}: {z[0]}</p>
+                    {/* {combat1 && combat1.map(x => x.dmg.map((z: any) => {
+                        //console.log(z)
+                        return (
+                            <p > {x.name}: {z[Number(level) - 1]}</p>
                         )
-                    }))}
+                    }))} */}
+
+                    Attack
+                    {
+                        combat1 && combat1.map(x => {
+                            return (
+                                <p>{x.name}: {x.dmg.map((number: any) => {
+                                    return (
+                                        <span> {number[Number(level) - 1]} </span>
+                                    )
+                                })}</p>
+                            )
+                        })
+                    }
+                    <br/>
+                    Elemental Skill
+                    {
+                        combat2 && combat3.map(x => {
+                            return (
+                                <p>{x.name}: {x.dmg.map((number: any) => {
+                                    return (
+                                        <span> {number[Number(level) - 1]} </span>
+                                    )
+                                })}</p>
+                            )
+                        })
+                    }
+                    <br/>
+                    Elemental Burst
+                    {
+                        combat2 && combat3.map(x => {
+                            return (
+                                <p>{x.name}: {x.dmg.map((number: any) => {
+                                    return (
+                                        <span> {number[Number(level) - 1]} </span>
+                                    )
+                                })}</p>
+                            )
+                        })
+                    }
                 </IonCardContent>
             </IonCard>
         </div>

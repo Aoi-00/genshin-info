@@ -1,7 +1,6 @@
-import { IonContent, IonHeader, IonItem, IonLabel, IonInput, IonPage, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import { Component, useState } from 'react';
 
-import ExploreContainer from '../components/ExploreContainer';
 import Talents from '../components/Talents';
 import './Tab3.css';
 
@@ -85,7 +84,7 @@ class Tab3 extends Component {
   }
 
   render() {
-    console.log(this.state)
+    //console.log(this.state)
     return (
       <IonPage>
         <IonHeader>
@@ -100,12 +99,11 @@ class Tab3 extends Component {
             </IonToolbar>
           </IonHeader>
 
-          <Talents char={"Bennett"} attribute={this.state.attr} />
+          <Talents char={"Bennett"} attribute={this.state.attr} level={this.state.level} />
           <IonItem>
             <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>
           </IonItem>
 
-          {/* <ExploreContainer name="Tab 3 page" /> */}
         </IonContent>
       </IonPage>
     );

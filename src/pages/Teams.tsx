@@ -7,13 +7,29 @@ interface userProps{
 }
 
 export default class Teams extends Component<userProps> {
-
+    state = {
+        team1:[],
+        team2:[],
+        team3:[],
+        team4:[]
+    }
 
     componentDidMount(){
         //this.props.history.push('/tab1')
+        console.log("mount")
+    }
+
+    componentWillUnmount(){
+        console.log("unmount")
     }
     Navigate = (teamid:string,id: string) => {
         this.props.history.push('/teams/' + teamid + '/'+ id)
+    }
+
+    handleChange = (e:any) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
     }
 
     render() {
