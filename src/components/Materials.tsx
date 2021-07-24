@@ -9,8 +9,8 @@ interface ContainerProps {
 
 const Materials: React.FC<ContainerProps> = ({ date, today }) => {
     const chosenDay = ((date) === "Today") ? today : date;
-    const talentMatResults = genshindb.talentmaterialtypes(chosenDay, { matchCategories: true });
-    const weaponMatResults = genshindb.weaponmaterialtypes(chosenDay, { matchCategories: true })
+    const talentMatResults = genshindb.materials('Talent Level-Up Material', { matchCategories: true });
+    const weaponMatResults = genshindb.materials('Weapon Ascension Material', { matchCategories: true, verboseCategories: true });
     let allResults = genshindb.materials(chosenDay, { matchCategories: true });
     let allMat: any[] = [];
     let talentMat: any[] = [];
@@ -24,10 +24,12 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
 
     talentMatResults && talentMatResults.map((each: any[]) => {
         const test = allMat.filter(eachItem => eachItem.name.includes(each));
-        return (
-
-            talentMat.push(test)
-        )
+        if (test.length !== 0){
+            return (
+            
+                talentMat.push(test)
+            )
+        }        
     })
     let talentMatData: any[] = [];
     talentMat && talentMat.map((each) => {
@@ -37,13 +39,14 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
             })
         )
     })
-    weaponMatResults && weaponMatResults.map((each: any[]) => {
-        return (
-            weaponMat.push(genshindb.materials(each, { matchCategories: true, verboseCategories: true }))
-        )
+    weaponMatResults && weaponMatResults.map((each: any) => {
+        const test = allMat.filter(eachItem => eachItem.name.includes(each.name));
+        if (test.length !== 0){
+            return (
+                weaponMat.push(each)
+            )
+        }
     })
-
-
 
 
 

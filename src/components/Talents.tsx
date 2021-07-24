@@ -12,91 +12,91 @@ interface ContainerProps {
 
 }
 
-function getParamName(label: string, occurence: number) {
-    let index = 0;
-    while (occurence > 0) {
-        index = label.indexOf("param", index + 1);
-        if (index === -1) return undefined;
-        occurence--;
-    }
-    return label.substring(index, index + 7).replace(":", "");
-}
-function getParamList(testString: string) {
-    var result = [];
-    var i = 1;
-    do {
-        let test = getParamName(testString, i);
-        if (test !== undefined) {
-            result.push(test)
-            i++
-        }
-    }
-    while (getParamName(testString, i) !== undefined);
-    return result;
-}
-function FilterText(arr: any) {
-    let result: { name: string; dmg: any; }[] = [];
-    for (var i in arr) {
-        var val = arr[i];
-        //console.log(val)
-        //let Json: {name: any; dmg:[]} ;
-        var label = Object.keys(val)[0].split("|");
-        FormatNumber(label[1], Object.values(val)[0])
-        var Json = { name: label[0], dmg: Object.values(val)[0] }
-        result.push(Json)
 
-        // for (var j in val) {
-        //     var sub_key = j;
-        //     var sub_val = val[j];
-
-        //     var name = sub_key.split("|") //name[1] will be format of dmg nums
-
-        //     FormatNumber(name[1], sub_val)
-        //     var Json = { name: name[0], dmg: sub_val }
-        //     //Json = { name: name[0], dmg: sub_val }
-        //     result.push(Json)
-        // }
-    }
-    //console.log(result)
-    return result
-}
-
-
-
-function FormatNumber(format: string, number: any) {
-    var result: any = format.match(/{.+?}/g)
-    //console.log(result,number)
-    for (var i in result) {
-        //console.log(result[i],number[i])
-        if (result[i].includes(":P")) {
-            number[i] = number[i].map((x: number) => (x * 100).toFixed(1))
-            //console.log(number[i])
-        }
-        else if (result[i].includes(":F1P")) {
-            number[i] = number[i].map((x: number) => Number((x * 100).toFixed(1)))
-        }
-        else if (result[i].includes(":F2P")) {
-            number[i] = number[i].map((x: number) => Number((x * 100).toFixed(2)))
-        }
-        else if (result[i].includes(":I")) {
-            number[i] = number[i].map((x: number) => Math.round(x))
-        }
-    }
-    //FormatResult(format, number)
-}
-
-// function FormatResult(format:string, number:any){
-//     var result : any = format.match(/{.+?}/g)
-//     for (var i in result){
-//         console.log(result[i],number[level])
-//     }
-// }
 
 const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
+    function getParamName(label: string, occurence: number) {
+        let index = 0;
+        while (occurence > 0) {
+            index = label.indexOf("param", index + 1);
+            if (index === -1) return undefined;
+            occurence--;
+        }
+        return label.substring(index, index + 7).replace(":", "");
+    }
+    function getParamList(testString: string) {
+        var result = [];
+        var i = 1;
+        do {
+            let test = getParamName(testString, i);
+            if (test !== undefined) {
+                result.push(test)
+                i++
+            }
+        }
+        while (getParamName(testString, i) !== undefined);
+        return result;
+    }
+    function FilterText(arr: any) {
+        let result: { name: string; dmg: any; }[] = [];
+        for (var i in arr) {
+            var val = arr[i];
+            //console.log(val)
+            //let Json: {name: any; dmg:[]} ;
+            var label = Object.keys(val)[0].split("|");
+            var formattedResult = FormatNumber(label[1], Object.values(val)[0])
+            var Json = { name: label[0], dmg: formattedResult }
+            result.push(Json)
+    
+        }
+        //console.log(result)
+        return result
+    }
+    
+    
+    
+    function FormatNumber(format: string, number: any) {
+        var result: any = format.match(/{.+?}/g)
+        //console.log(result,number)
+        for (var i in result) {
+            //console.log(result[i],number[i])
+            if (result[i].includes(":P")) {
+                number[i] = number[i].map((x: number) => (x * 100).toFixed(1)+ '%')
+                //console.log(number[i])
+            }
+            else if (result[i].includes(":F1P")) {
+                number[i] = number[i].map((x: number) => Number((x * 100).toFixed(1)) + '%')
+            }
+            else if (result[i].includes(":F2P")) {
+                number[i] = number[i].map((x: number) => Number((x * 100).toFixed(2))+ '%')
+            }
+            else if (result[i].includes(":I")) {
+                number[i] = number[i].map((x: number) => Math.round(x))
+            }
+            format = format.replace(result[i],number[i][Number(level)-1])
+        }
+        return format
+        
+    }
+    
+    // function FormatResult(format: string, number: any){
+    //     var result: any = format.match(/{.+?}/g)
+    //     for (var i in result) {
+    //         console.log(format, result[i],number[level])
+    //     }
+    // }
+
     const [combat1, setCombat1] = useState(Array());
     const [combat2, setCombat2] = useState(Array());
     const [combat3, setCombat3] = useState(Array());
-    const [talentLvl, setTalentLvl] = useState(1);
+    const [talentLvl, setTalentLvl] = useState('1');
+
+    useEffect(()=> {
+        if (talentLvl !== level){
+            setTalentLvl(level)
+        }
+    },[level])
+
     useEffect(() => {
         //console.log(char)
         if (char.length !== 0 && Object.keys(attribute).length !== 0) {
@@ -105,14 +105,14 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []
                 for (var label of talentDetails[stat].attributes.labels) {
-                    if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
+                    //if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
                         let Params = getParamList(label)
                         let values = [];
                         for (const param of Params) {
                             values.push(talentDetails[stat].attributes.parameters[param])
                         }
                         talentMultiplier.push({ [label]: values })
-                    }
+                    //}
                 }
                 allTalents[stat] = talentMultiplier
             }
@@ -129,48 +129,29 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         <div>
             <IonCard>
                 <IonCardContent>
-                    {/* {combat1 && combat1.map(x => x.dmg.map((z: any) => {
-                        //console.log(z)
-                        return (
-                            <p > {x.name}: {z[Number(level) - 1]}</p>
-                        )
-                    }))} */}
-
                     Attack
                     {
                         combat1 && combat1.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.map((number: any) => {
-                                    return (
-                                        <span> {number[Number(level) - 1]} </span>
-                                    )
-                                })}</p>
+                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
                     <br/>
                     Elemental Skill
                     {
-                        combat2 && combat3.map(x => {
+                        combat2 && combat2.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.map((number: any) => {
-                                    return (
-                                        <span> {number[Number(level) - 1]} </span>
-                                    )
-                                })}</p>
+                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
                     <br/>
                     Elemental Burst
                     {
-                        combat2 && combat3.map(x => {
+                        combat3 && combat3.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.map((number: any) => {
-                                    return (
-                                        <span> {number[Number(level) - 1]} </span>
-                                    )
-                                })}</p>
+                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
