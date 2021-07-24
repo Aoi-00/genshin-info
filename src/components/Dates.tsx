@@ -32,10 +32,10 @@ const Dates: React.FC<ContainerProps> = ({ handleChange, date }) => {
                 </IonSegmentButton>
                 <IonSegmentButton value="Saturday">
                     <IonLabel>Sat</IonLabel>
-                </IonSegmentButton> */}
+                </IonSegmentButton>
                 <IonSegmentButton value="Sunday">
                     <IonLabel>Sun</IonLabel>
-                </IonSegmentButton>
+                </IonSegmentButton> */}
             </IonSegment>
         </div>
     )

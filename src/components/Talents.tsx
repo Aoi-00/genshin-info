@@ -133,7 +133,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     {
                         combat1 && combat1.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
@@ -142,7 +142,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     {
                         combat2 && combat2.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
@@ -151,7 +151,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     {
                         combat3 && combat3.map(x => {
                             return (
-                                <p>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
                             )
                         })
                     }
