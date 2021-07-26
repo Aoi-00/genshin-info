@@ -10,10 +10,11 @@ interface ContainerProps {
     team: string;
     navigate: Function;
     chars:any;
+    onClear:Function;
 }
 
 
-const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate, chars }) => {
+const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate, chars, onClear }) => {
     // useEffect(()=> {
 
     // },[chars])
@@ -23,7 +24,7 @@ const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate, char
             <IonItem>
                 <IonText >Team {team}</IonText>
 
-                <IonButton fill="outline" slot="end">Clear</IonButton>
+                <IonButton onClick={(e)=> {onClear(team)}} fill="outline" slot="end">Clear</IonButton>
             </IonItem>
 
             <IonCardContent>

@@ -69,6 +69,13 @@ export default class Teams extends Component<userProps> {
         })
     }
 
+    onClear = (teamid: string) => {
+        let team = "team"+teamid;
+        this.setState({
+            [team]: []
+        })
+    }
+
     render() {
         return (
             <IonPage>
@@ -86,10 +93,10 @@ export default class Teams extends Component<userProps> {
                     </IonHeader>
 
                     <div>
-                        <Party team='1' navigate={this.Navigate} chars={this.state.team1} />
-                        <Party team='2' navigate={this.Navigate} chars={this.state.team2} />
-                        <Party team='3' navigate={this.Navigate} chars={this.state.team3} />
-                        <Party team='4' navigate={this.Navigate} chars={this.state.team4} />
+                        <Party team='1' navigate={this.Navigate} chars={this.state.team1} onClear = {this.onClear}/>
+                        <Party team='2' navigate={this.Navigate} chars={this.state.team2} onClear = {this.onClear} />
+                        <Party team='3' navigate={this.Navigate} chars={this.state.team3} onClear = {this.onClear}/>
+                        <Party team='4' navigate={this.Navigate} chars={this.state.team4} onClear = {this.onClear}/>
                     </div>
 
 
