@@ -2,31 +2,68 @@ import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/rea
 import React, { Component } from 'react'
 import Party from '../components/Party'
 
-interface userProps{
-    history:any
+interface userProps {
+    history: any
 }
 
 export default class Teams extends Component<userProps> {
     state = {
-        team1:[],
-        team2:[],
-        team3:[],
-        team4:[]
+        team1: [],
+        team2: [],
+        team3: [],
+        team4: []
     }
 
-    componentDidMount(){
+    componentDidMount() {
         //this.props.history.push('/tab1')
-        console.log("mount")
+        //console.log("mount Teams")
+        let team1: any[] = [], team2: any[] = [], team3: any[] = [], team4: any[] = [];
+        for (var key in localStorage) {
+            if (key.includes('/teams/')) {
+                var retrievedObject = localStorage.getItem(`${key}`);
+                if (retrievedObject !== null) {
+                    switch (key.charAt(7)) {
+                        case ('1'):
+                            team1[Number(key.charAt(9))-1] = JSON.parse(retrievedObject);
+                            break;
+                        case ('2'):
+                            team2[Number(key.charAt(9))-1] = JSON.parse(retrievedObject);
+                            break;
+                        case ('3'):
+                            team3[Number(key.charAt(9))-1] = JSON.parse(retrievedObject);
+                            break;
+                        case ('4'):
+                            team4[Number(key.charAt(9))-1] = JSON.parse(retrievedObject);
+                            break;
+                        default: {
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+        }
+        this.setState({
+            team1:team1,
+            team2:team2,
+            team3:team3,
+            team4:team4
+        })
     }
 
-    componentWillUnmount(){
-        console.log("unmount")
-    }
-    Navigate = (teamid:string,id: string) => {
-        this.props.history.push('/teams/' + teamid + '/'+ id)
+    componentDidUpdate(){
+        //console.log(this.state)
     }
 
-    handleChange = (e:any) => {
+    componentWillUnmount() {
+        //console.log("unmount Teams")
+    }
+    Navigate = (teamid: string, id: string) => {
+        this.props.history.push('/teams/' + teamid + '/' + id)
+    }
+
+    handleChange = (e: any) => {
         this.setState({
             [e.target.id]: e.target.value
         })
@@ -35,7 +72,7 @@ export default class Teams extends Component<userProps> {
     render() {
         return (
             <IonPage>
-                
+
                 <IonHeader>
                     <IonToolbar>
                         <IonTitle>Teams</IonTitle>
@@ -49,10 +86,10 @@ export default class Teams extends Component<userProps> {
                     </IonHeader>
 
                     <div>
-                        <Party team='1' navigate={this.Navigate}/>
-                        <Party team='2' navigate={this.Navigate}/>
-                        <Party team='3' navigate={this.Navigate}/>
-                        <Party team='4' navigate={this.Navigate}/>
+                        <Party team='1' navigate={this.Navigate} chars={this.state.team1} />
+                        <Party team='2' navigate={this.Navigate} chars={this.state.team2} />
+                        <Party team='3' navigate={this.Navigate} chars={this.state.team3} />
+                        <Party team='4' navigate={this.Navigate} chars={this.state.team4} />
                     </div>
 
 

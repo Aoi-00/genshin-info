@@ -9,10 +9,14 @@ interface ContainerProps {
     //handleChange: Function;
     team: string;
     navigate: Function;
+    chars:any;
 }
 
 
-const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate }) => {
+const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate, chars }) => {
+    // useEffect(()=> {
+
+    // },[chars])
 
     return (
         <IonCard>
@@ -26,24 +30,24 @@ const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate }) =>
                 <IonRow>
                     <MDBCol size='3'>
                         <IonAvatar  >
-                            <img id={'1'} src={defaultAvatar} alt="" onClick={(e) => {
+                            <img id={'1'} src={chars[0] ? chars[0].char.images.icon : defaultAvatar } alt="" onClick={(e) => {
                                 navigate(team, (e.target as HTMLImageElement).id);
                             }} />
                         </IonAvatar>
                     </MDBCol>
                     <MDBCol size='3'>
                         <IonAvatar>
-                            <img id={'2'} src={defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
+                            <img id={'2'} src={chars[1] ? chars[1].char.images.icon : defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
                         </IonAvatar>
                     </MDBCol>
                     <MDBCol size='3'>
                         <IonAvatar>
-                            <img id={'3'} src={defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
+                            <img id={'3'} src={chars[2] ? chars[2].char.images.icon : defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
                         </IonAvatar>
                     </MDBCol>
                     <MDBCol size='3'>
                         <IonAvatar>
-                            <img id={'4'} src={defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
+                            <img id={'4'} src={chars[3] ? chars[3].char.images.icon : defaultAvatar} alt="" onClick={(e) => navigate(team, (e.target as HTMLImageElement).id)} />
                         </IonAvatar>
                     </MDBCol>
                 </IonRow>

@@ -42,9 +42,12 @@ export default class Tab2 extends Component<userProps> {
     this.setState({
       allWep: genshindb.weapons('names', { matchCategories: true })
     })
-    var retrievedObject = localStorage.getItem(this.props.location);
+    var retrievedObject = localStorage.getItem(this.props.location.pathname);
     if (retrievedObject !== null) {
-      console.log('retrievedObject: ', JSON.parse(retrievedObject));
+      this.setState({
+        char: JSON.parse(retrievedObject).char
+      })
+      //console.log('retrievedObject: ', JSON.parse(retrievedObject).char);
       // this.setState({
       //   feather: JSON.parse(retrievedObject).feather,
       //   flower: JSON.parse(retrievedObject).flower,
@@ -56,24 +59,33 @@ export default class Tab2 extends Component<userProps> {
       //   refine: JSON.parse(retrievedObject).refine,
       //   weapLvl: JSON.parse(retrievedObject).weapLvl,
       // })
+
+
     }
   }
 
   componentWillUnmount() {
     //console.log(this.props.location)
-    let data = {
-      feather: this.state.feather,
-      flower: this.state.flower,
-      sand: this.state.sand,
-      cup: this.state.cup,
-      head: this.state.head,
-      weap: this.state.weap,
-      char: this.state.char,
-      refine: this.state.refine,
-      weapLvl: this.state.weapLvl,
-    }
-    //console.log(data)
-    localStorage.setItem(this.props.location, JSON.stringify(data))
+    // let data = {
+    //   feather: this.state.feather,
+    //   flower: this.state.flower,
+    //   sand: this.state.sand,
+    //   cup: this.state.cup,
+    //   head: this.state.head,
+    //   weap: this.state.weap,
+    //   char: this.state.char,
+    //   refine: this.state.refine,
+    //   weapLvl: this.state.weapLvl,
+    // }
+    // //console.log(data)
+    // localStorage.setItem(this.props.location, JSON.stringify(data))
+
+    if (Object.keys(this.state.char).length !== 0){
+      let data = {
+        char:this.state.char
+      }
+      localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
+    }   
   }
 
   componentDidUpdate(prevProp: any, prevState: any, snapShot: any) {
@@ -89,10 +101,18 @@ export default class Tab2 extends Component<userProps> {
         wepList: wepList
       })
       //name, level, ascended, const TODO: allow level,ascend,const changes
-      let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), 90, false, 0);
-      this.setState({
-        buildChar: char
-      })
+      if (charInfo.name !== "Aether"){
+        let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), 90, false, 0);
+        this.setState({
+          buildChar: char
+        })
+      }
+      else {
+        let char = new genshin.Character('me_geo',90,false,0);
+        this.setState({
+          buildChar: char
+        })
+      }
 
     }
 

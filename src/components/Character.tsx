@@ -1,6 +1,6 @@
-import { IonAvatar,IonItem, IonRow, IonSegment, IonSegmentButton } from '@ionic/react'
+import { IonAvatar, IonItem, IonRow, IonSegment, IonSegmentButton } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
-import {  MDBCol } from "mdbreact";
+import { MDBCol } from "mdbreact";
 import anemo from '../assets/anemo.jpg'
 import geo from '../assets/geo.jpg'
 import cryo from '../assets/cryo.jpg'
@@ -20,8 +20,13 @@ interface ContainerProps {
 const Character: React.FC<ContainerProps> = ({ handleChange }) => {
     const [ele, setEle] = useState('anemo');
     const [charList, setCharList] = useState(genshindb.characters(ele, { matchCategories: true }))
-
     useEffect(() => {
+        if (ele === 'geo' || ele === 'anemo' || ele === 'electro') {
+            let list = genshindb.characters(ele, { matchCategories: true });
+            list.push("Aether")
+            setCharList(list)
+            return charList;
+        }
         setCharList(genshindb.characters(ele, { matchCategories: true }))
         return charList;
     }, [ele])
@@ -37,12 +42,12 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
                     </IonSegmentButton>
                     <IonSegmentButton value="geo">
                         <IonAvatar>
-                            <img src={geo}  alt="" ></img>
+                            <img src={geo} alt="" ></img>
                         </IonAvatar>
                     </IonSegmentButton>
                     <IonSegmentButton value="pyro">
                         <IonAvatar>
-                            <img src={pyro}  alt=""></img>
+                            <img src={pyro} alt=""></img>
                         </IonAvatar>
                     </IonSegmentButton>
                     <IonSegmentButton value="cryo">
@@ -52,12 +57,12 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
                     </IonSegmentButton>
                     <IonSegmentButton value="hydro">
                         <IonAvatar>
-                            <img src={hydro}  alt=""></img>
+                            <img src={hydro} alt=""></img>
                         </IonAvatar>
                     </IonSegmentButton>
                     <IonSegmentButton value="electro">
                         <IonAvatar>
-                            <img src={electro}  alt=""></img>
+                            <img src={electro} alt=""></img>
                         </IonAvatar>
                     </IonSegmentButton>
                     <IonSegmentButton value="dendro">
@@ -68,14 +73,14 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
 
                 </IonSegment>
             </IonItem>
-            { charList &&
+            {charList &&
                 <IonItem>
                     <IonRow>
                         {charList && charList.map((eachChar: any) => {
                             var charInfo = genshindb.characters(eachChar);
                             return (
                                 <MDBCol key={charInfo.name} size="auto">
-                                    <IonAvatar onClick={(e) => handleChange(charInfo,e)} >
+                                    <IonAvatar onClick={(e) => handleChange(charInfo, e)} >
                                         <img id={'char'} alt="" src={charInfo.images.icon} />
                                     </IonAvatar>
                                 </MDBCol>
