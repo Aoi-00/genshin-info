@@ -1,6 +1,7 @@
 import React from 'react'
 import { IonRow, IonCol, IonLabel, IonCard, IonCardContent, IonItem,  IonAvatar, IonButton, } from '@ionic/react'
 import defaultimage from '../assets/default.jpeg';
+import { useLocation } from 'react-router';
 
 const genshin = require("genshin_panel");
 const genshindb = require('genshin-db');
@@ -9,9 +10,10 @@ interface ContainerProps {
     
     char: any;
     attribute:any;
+    navigate: Function;
 } 
 
-const DmgCalculator: React.FC<ContainerProps> = ({  char, attribute }) => {
+const DmgCalculator: React.FC<ContainerProps> = ({  char, attribute, navigate }) => {
     //console.log(attribute)
     
     let basicStats = [
@@ -47,68 +49,9 @@ const DmgCalculator: React.FC<ContainerProps> = ({  char, attribute }) => {
         }
     }
     
-    
-    
-
-//     { let art1 = new genshin.ArtifactBuilder()
-//     .setName("crimsonWitch")      // 如雷的盛怒
-//     .position("flower")             // 生之花
-//     .mainTag("lifeStatic", 4780)
-//     .tag("critical", 0.066)
-//     .tag("criticalDamage", 0.241)
-//     .tag("attackStatic", 16)
-//     .tag("defendStatic", 19)
-//     .build()
-//     let art2 = new genshin.ArtifactBuilder()
-//     .setName("crimsonWitch")      // 如雷的盛怒
-//     .position("feather")             // 生之花
-//     .mainTag("attackStatic", 311)
-//     .tag("critical", 0.062)
-//     .tag("criticalDamage", 0.249)
-//     .tag("recharge", 0.065)
-//     .tag("defendStatic", 35)
-//     .build()
-//     let art3 = new genshin.ArtifactBuilder()
-//     .setName("crimsonWitch")      // 如雷的盛怒
-//     .position("sand")             // 生之花
-//     .mainTag("recharge", 0.518)
-//     .tag("attackPercentage", 0.105)
-//     .tag("criticalDamage", 0.14)
-//     .tag("attackStatic", 16)
-//     .tag("defendStatic", 53)
-//     .build()
-//     let art4 = new genshin.ArtifactBuilder()
-//     .setName("crimsonWitch")      // 如雷的盛怒
-//     .position("cup")             // 生之花
-//     .mainTag("fireBonus", 0.466)
-//     .tag("critical", 0.031)
-//     .tag("criticalDamage", 0.194)
-//     .tag("attackPercentage", 0.152)
-//     .tag("defendStatic", 42)
-//     .build()
-//     let art5 = new genshin.ArtifactBuilder()
-//     .setName("crimsonWitch")      // 如雷的盛怒
-//     .position("head")             // 生之花
-//     .mainTag("criticalDamage", 0.622)
-//     .tag("critical", 0.058)
-//     .tag("elementalMastery", 40)
-//     .tag("attackStatic", 39)
-//     .tag("defendStatic", 37)
-//     .build()
-//     let testchar = new genshin.Character("bennett", 90, false, 5);
-//     let testWeap = new genshin.Weapon("primordialjadecutter", 90, false, 1);
-//     let test = new genshin.AttributeBuilder()
-//     .character(testchar)
-//     .weapon(testWeap)
-//     .artifact(art1)
-//     .artifact(art2)
-//     .artifact(art3)
-//     .artifact(art4)
-//     .artifact(art5)
-//     .build()
-//     console.log(test, attribute)}
-    
-// ;
+    let location = useLocation();
+    let team = location.pathname.charAt(7);
+    let id = location.pathname.charAt(9);
 
     return (
         <div>
@@ -121,7 +64,7 @@ const DmgCalculator: React.FC<ContainerProps> = ({  char, attribute }) => {
                         <img alt="" src={Object.keys(char).length === 0 ? defaultimage : char.images.icon}></img>
                     </IonAvatar>
                     <IonLabel>{Object.keys(char).length === 0 ? "Choose character" : char.name}</IonLabel>
-                    
+                    <IonButton onClick={(e)=> {navigate(team,id)}} fill="outline" slot="end">View More</IonButton>
                 </IonItem>
 
                 <IonCardContent>

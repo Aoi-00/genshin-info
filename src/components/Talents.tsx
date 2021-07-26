@@ -99,8 +99,8 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
 
     useEffect(() => {
         //console.log(char)
-        if (char.length !== 0 && Object.keys(attribute).length !== 0) {
-            let talentDetails: { [key: string]: any } = genshindb.talents(char)
+        if (Object.keys(char).length !== 0 && Object.keys(attribute).length !== 0) {
+            let talentDetails: { [key: string]: any } = genshindb.talents(char.name)
             let allTalents: { [key: string]: any } = {};
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []

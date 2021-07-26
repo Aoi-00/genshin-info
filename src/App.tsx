@@ -10,7 +10,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, map, people, square, triangle } from 'ionicons/icons';
+import { calendar, ellipse, map, people, square, triangle } from 'ionicons/icons';
 import team from './assets/party-setup.jpg';
 import Tab1 from './pages/Tab1';
 import Build from './pages/Build';
@@ -48,6 +48,7 @@ const App: React.FC = () => (
          
           
           <Route exact path="/tab3" component={Tab3}/>
+          <Route exact path="/teams/:teamid/:id/dmg" component={Tab3}/>
 
           <Route exact path="/map" component={Map}/>
 
@@ -60,8 +61,8 @@ const App: React.FC = () => (
 
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/tab1">
-            <IonIcon icon={triangle} />
-            <IonLabel>Tab 1</IonLabel>
+            <IonIcon icon={calendar} />
+            <IonLabel>Dailies</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab2" href="/teams">
             <IonIcon icon={people}> </IonIcon>

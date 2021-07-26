@@ -247,6 +247,9 @@ export default class Tab2 extends Component<userProps> {
 
   }
 
+  Navigate = (teamid: string, id: string) => {
+    this.props.history.push('/teams/' + teamid + '/' + id + '/dmg')
+}
 
   render() {
     return (
@@ -282,7 +285,7 @@ export default class Tab2 extends Component<userProps> {
           </div>
 
           <div>
-            <DmgCalculator char={this.state.char} attribute={this.state.buildAttributes} />
+            <DmgCalculator char={this.state.char} attribute={this.state.buildAttributes} navigate={this.Navigate} />
           </div>
 
         </IonContent>

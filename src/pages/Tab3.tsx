@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
 import { Component, useState } from 'react';
 
 import Talents from '../components/Talents';
@@ -7,11 +7,17 @@ import './Tab3.css';
 const genshindb = require('genshin-db');
 const genshin = require("genshin_panel");
 
-class Tab3 extends Component {
+interface userProps {
+  history: any;
+  location: any
+}
+
+class Tab3 extends Component<userProps> {
 
   state = {
     level: "1",
-    attr: {}
+    attr: {},
+    char: {}
   }
  
   componentDidMount() {
@@ -76,7 +82,20 @@ class Tab3 extends Component {
     this.setState({
       attr: test
     })
+
+    var retrievedObject = localStorage.getItem(this.props.location.pathname.slice(0,-4));
+    if (retrievedObject !== null) {
+      this.setState({
+        char: JSON.parse(retrievedObject).char
+      })
+    }
+
   }
+
+  // componentDidUpdate(){
+  //   console.log(this.state.char)
+  // }
+
   handleChange = (e: any) => {
     this.setState({
       [e.target.id] : e.target.value
@@ -90,6 +109,9 @@ class Tab3 extends Component {
         <IonHeader>
           <IonToolbar>
             <IonTitle>Tab 3</IonTitle>
+            <IonButtons slot="start">
+              <IonBackButton defaultHref={this.props.location.pathname.slice(0,-4)} />
+            </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
@@ -99,7 +121,7 @@ class Tab3 extends Component {
             </IonToolbar>
           </IonHeader>
 
-          <Talents char={"Bennett"} attribute={this.state.attr} level={this.state.level} />
+          <Talents char={this.state.char} attribute={this.state.attr} level={this.state.level} />
           <IonItem>
             <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>
           </IonItem>
