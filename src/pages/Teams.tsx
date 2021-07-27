@@ -74,6 +74,13 @@ export default class Teams extends Component<userProps> {
         this.setState({
             [team]: []
         })
+        let keyName = "/teams/" + teamid;
+        for (var key in localStorage){
+            if (key.includes(keyName)){
+                localStorage.removeItem(key)
+            }
+        }
+        
     }
 
     render() {
