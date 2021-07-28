@@ -44,8 +44,22 @@ export default class Tab2 extends Component<userProps> {
     })
     var retrievedObject = localStorage.getItem(this.props.location.pathname);
     if (retrievedObject !== null) {
+
+      if (Object.keys(JSON.parse(retrievedObject).weap).length !==0) {
+
+        this.setState({
+          weap: JSON.parse(retrievedObject).weap 
+        })
+      }
+
+      console.log(JSON.parse(retrievedObject))
+      //localStorage.setItem("selectedWeapon", selectedWep);
+
+
+
       this.setState({
-        char: JSON.parse(retrievedObject).char
+      char: JSON.parse(retrievedObject).char,
+        
       })
       //console.log('retrievedObject: ', JSON.parse(retrievedObject).char);
       // this.setState({
@@ -82,7 +96,8 @@ export default class Tab2 extends Component<userProps> {
 
     if (Object.keys(this.state.char).length !== 0){
       let data = {
-        char:this.state.char
+        char:this.state.char,
+        weap:this.state.weap
       }
       localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
     }   

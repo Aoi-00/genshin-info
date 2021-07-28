@@ -22,6 +22,7 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
     const [effect, setEffect] = useState("No Effect")
     let tempholder: any = { specialized: 0, attack: 0 }
     const [substat, setSubstat] = useState(tempholder)
+    
 
     useEffect(() => {
         if (Object.keys(weapon).length !== 0) {
@@ -49,6 +50,8 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
             }
         }
     }, [weapLvl])
+
+    console.log(weapon)
 
     return (
         <div>
