@@ -45,57 +45,89 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             //let Json: {name: any; dmg:[]} ;
             var label = Object.keys(val)[0].split("|");
             var formattedResult = FormatNumber(label[1], Object.values(val)[0])
+            ApplyBonus(label[0] ,formattedResult, Object.values(val)[0])
             var Json = { name: label[0], dmg: formattedResult }
             result.push(Json)
-    
+
         }
         //console.log(result)
         return result
     }
-    
-    
-    
+
+
+
     function FormatNumber(format: string, number: any) {
         var result: any = format.match(/{.+?}/g)
         //console.log(result,number)
         for (var i in result) {
             //console.log(result[i],number[i])
             if (result[i].includes(":P")) {
-                number[i] = number[i].map((x: number) => (x * 100).toFixed(1)+ '%')
+                number[i] = number[i].map((x: number) => (x * 100).toFixed(1) + '%')
                 //console.log(number[i])
             }
             else if (result[i].includes(":F1P")) {
                 number[i] = number[i].map((x: number) => Number((x * 100).toFixed(1)) + '%')
             }
             else if (result[i].includes(":F2P")) {
-                number[i] = number[i].map((x: number) => Number((x * 100).toFixed(2))+ '%')
+                number[i] = number[i].map((x: number) => Number((x * 100).toFixed(2)) + '%')
             }
             else if (result[i].includes(":I")) {
                 number[i] = number[i].map((x: number) => Math.round(x))
             }
-            format = format.replace(result[i],number[i][Number(level)-1])
+            format = format.replace(result[i], number[i][Number(level) - 1])
         }
         return format
-        
+
     }
-    
-    // function FormatResult(format: string, number: any){
-    //     var result: any = format.match(/{.+?}/g)
-    //     for (var i in result) {
-    //         console.log(format, result[i],number[level])
-    //     }
-    // }
+
+    function ApplyBonus(label:string ,format: string, number: any) {
+        if (!["CD", "Energy", "Duration", "Stamina"].some(substring => label.includes(substring))) {
+            if (format.includes("Max HP")) {
+                //console.log(format,number, "multiply by HP") //attribute.life()
+                var name = format.split("Max HP")
+                console.log(format.replace(name[0] + "Max HP", (Number(name[0].replace('%',""))/100 * attribute.life()).toString()))
+            }
+            else if (format.includes("DEF")) {
+                //console.log(format,number, "multiply by DEF") //attribute.defend()
+                var name = format.split("DEF")
+                console.log(format.replace(name[0] + "DEF", (Number(name[0].replace('%',""))/100 * attribute.defend()).toString()))
+            }
+            else {
+                //console.log(format,number, "multiply by atk") //attribute.attack()
+                let values = format.match(/[0-9]*\.?[0-9]+%/g); 
+                let tempString:any;
+                for ( var i in values) {
+                    if (values[Number(i)].includes('%')){
+                        if (Number(i) === 0) {
+                            tempString =  format.replace( values[Number(i)], (Number(values[Number(i)].replace('%',""))/100 * attribute.attack()).toFixed(0).toString() ) 
+                        }
+                        else {
+                            tempString = tempString.replace( values[Number(i)], (Number(values[Number(i)].replace('%',""))/100 * attribute.attack()).toFixed(0).toString() ) 
+                        }
+                    }
+                }
+                console.log(tempString)
+            }
+        }
+    }
+
+    function ApplyEleBonus (skillName:string, number:any){
+        //search for DMG or exclude Regeneration/Healing (apply curedEffect/cureEffect)
+        attribute.filter((x: any)=> x.name.includes("bonus").map((each: any) => {
+            console.log(each)
+        }))
+    }
 
     const [combat1, setCombat1] = useState(Array());
     const [combat2, setCombat2] = useState(Array());
     const [combat3, setCombat3] = useState(Array());
     const [talentLvl, setTalentLvl] = useState('1');
 
-    useEffect(()=> {
-        if (talentLvl !== level){
+    useEffect(() => {
+        if (talentLvl !== level) {
             setTalentLvl(level)
         }
-    },[level])
+    }, [level])
 
     useEffect(() => {
         //console.log(char)
@@ -106,12 +138,12 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                 let talentMultiplier: any[] = []
                 for (var label of talentDetails[stat].attributes.labels) {
                     //if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
-                        let Params = getParamList(label)
-                        let values = [];
-                        for (const param of Params) {
-                            values.push(talentDetails[stat].attributes.parameters[param])
-                        }
-                        talentMultiplier.push({ [label]: values })
+                    let Params = getParamList(label)
+                    let values = [];
+                    for (const param of Params) {
+                        values.push(talentDetails[stat].attributes.parameters[param])
+                    }
+                    talentMultiplier.push({ [label]: values })
                     //}
                 }
                 allTalents[stat] = talentMultiplier
@@ -125,7 +157,9 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         }
     }, [char, level])
 
-    return ( //key={x.name}
+
+
+    return (
         <div>
             <IonCard>
                 <IonCardContent>
@@ -137,7 +171,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                             )
                         })
                     }
-                    <br/>
+                    <br />
                     Elemental Skill
                     {
                         combat2 && combat2.map(x => {
@@ -146,7 +180,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                             )
                         })
                     }
-                    <br/>
+                    <br />
                     Elemental Burst
                     {
                         combat3 && combat3.map(x => {

@@ -27,7 +27,7 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
         if (Object.keys(weapon).length !== 0) {
             let temp = weapon.effect.replace(`{${0}}`, weapon[refine][0]);
             for (let i = 0; i < weapon[refine].length; i++) {
-                if (weapon[refine].legnth === 1) {
+                if (weapon[refine].length === 1) {
                     setEffect(weapon.effect.replace(`{${i}}`, weapon[refine][i]))
                     return;
                 }
