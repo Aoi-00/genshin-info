@@ -25,7 +25,7 @@ export default class Tab2 extends Component<userProps> {
     sand: [],
     cup: [],
     head: [],
-    weap: {},
+    weap: '',
     char: {},
     refine: 'r1',
     weapLvl: 1,
@@ -45,62 +45,31 @@ export default class Tab2 extends Component<userProps> {
     var retrievedObject = localStorage.getItem(this.props.location.pathname);
     if (retrievedObject !== null) {
 
-      if (Object.keys(JSON.parse(retrievedObject).weap).length !==0) {
-
+      if (JSON.parse(retrievedObject).weap.length !== 0) {
+        console.log(JSON.parse(retrievedObject))
         this.setState({
-          weap: JSON.parse(retrievedObject).weap 
+          weap: JSON.parse(retrievedObject).weap,
+          refine: JSON.parse(retrievedObject).refine,
+          weapLvl: JSON.parse(retrievedObject).weapLvl,
         })
       }
-
-      console.log(JSON.parse(retrievedObject))
-      //localStorage.setItem("selectedWeapon", selectedWep);
-
-
-
       this.setState({
-      char: JSON.parse(retrievedObject).char,
-        
+        char: JSON.parse(retrievedObject).char,
+
       })
-      //console.log('retrievedObject: ', JSON.parse(retrievedObject).char);
-      // this.setState({
-      //   feather: JSON.parse(retrievedObject).feather,
-      //   flower: JSON.parse(retrievedObject).flower,
-      //   sand: JSON.parse(retrievedObject).sand,
-      //   cup: JSON.parse(retrievedObject).cup,
-      //   head: JSON.parse(retrievedObject).head,
-      //   weap: JSON.parse(retrievedObject).weap,
-      //   char: JSON.parse(retrievedObject).char,
-      //   refine: JSON.parse(retrievedObject).refine,
-      //   weapLvl: JSON.parse(retrievedObject).weapLvl,
-      // })
-
-
     }
   }
 
   componentWillUnmount() {
-    //console.log(this.props.location)
-    // let data = {
-    //   feather: this.state.feather,
-    //   flower: this.state.flower,
-    //   sand: this.state.sand,
-    //   cup: this.state.cup,
-    //   head: this.state.head,
-    //   weap: this.state.weap,
-    //   char: this.state.char,
-    //   refine: this.state.refine,
-    //   weapLvl: this.state.weapLvl,
-    // }
-    // //console.log(data)
-    // localStorage.setItem(this.props.location, JSON.stringify(data))
-
-    if (Object.keys(this.state.char).length !== 0){
+    if (Object.keys(this.state.char).length !== 0) {
       let data = {
-        char:this.state.char,
-        weap:this.state.weap
+        char: this.state.char,
+        weap: this.state.weap,
+        refine: this.state.refine,
+        weapLvl: this.state.weapLvl
       }
       localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
-    }   
+    }
   }
 
   componentDidUpdate(prevProp: any, prevState: any, snapShot: any) {
@@ -116,23 +85,21 @@ export default class Tab2 extends Component<userProps> {
         wepList: wepList
       })
       //name, level, ascended, const TODO: allow level,ascend,const changes
-      if (charInfo.name !== "Aether"){
+      if (charInfo.name !== "Aether") {
         let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), 90, false, 0);
         this.setState({
           buildChar: char
         })
       }
       else {
-        let char = new genshin.Character('me_geo',90,false,0);
+        let char = new genshin.Character('me_geo', 90, false, 0);
         this.setState({
           buildChar: char
         })
       }
-
     }
 
     if (this.state.weap !== prevState.weap) {
-      //console.log(this.state.refine)
       let selectedWep: any = this.state.weap;
       if (selectedWep) {
         this.setState({
@@ -142,36 +109,39 @@ export default class Tab2 extends Component<userProps> {
     }
 
     if (this.state.weap !== prevState.weap || this.state.refine !== prevState.refine || this.state.weapLvl !== prevState.weapLvl) {
-      //To add choice for ascension of wep name, level, ascend,refine
-      let temp: any = this.state.weap;
-      let name;
-      switch (temp.name) {
-        case ("Sacrificial Fragments"): {
-          name = "scarificialfragments";
-          break;
+      try {
+        //To add choice for ascension of wep name, level, ascend,refine
+        let name;
+        switch (this.state.weap) {
+          case ("Sacrificial Fragments"): {
+            name = "scarificialfragments";
+            break;
+          }
+          case ("Emerald Orb"): {
+            name = "emeraldord";
+            break;
+          }
+          case ("Favonius Codex"): {
+            name = "favoniuscodes";
+            break;
+          }
+          case ("Sword of Descension"): {
+            name = "swordofdecension";
+            break;
+          }
+          default: {
+            name = this.state.weap.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+            break;
+          }
         }
-        case ("Emerald Orb"): {
-          name = "emeraldord";
-          break;
-        }
-        case ("Favonius Codex"): {
-          name = "favoniuscodes";
-          break;
-        }
-        case ("Sword of Descension"): {
-          name = "swordofdecension";
-          break;
-        }
-        default: {
-          name = temp.name.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
-          break;
-        }
+        let wep = new genshin.Weapon(name, this.state.weapLvl, false, parseInt(this.state.refine.replace("r", ""), 10))
+        this.setState({
+          buildWeap: wep
+        })
       }
-      let wep = new genshin.Weapon(name, this.state.weapLvl, false, parseInt(this.state.refine.replace("r", ""), 10))
-      this.setState({
-        buildWeap: wep
-      })
-      console.log(wep)
+      catch (err) {
+        alert("Weapon details not out yet, please choose another.")
+      }
     }
 
     if (this.state.buildWeap !== prevState.buildWeap || this.state.flower !== prevState.flower || this.state.feather !== prevState.feather || this.state.sand !== prevState.sand || this.state.cup !== prevState.cup || this.state.head !== prevState.head || this.state.buildChar !== prevState.buildChar) {
@@ -207,7 +177,6 @@ export default class Tab2 extends Component<userProps> {
   }
 
   handleObject = (Info: any, e: any) => {
-    //console.log(e, charInfo)
     this.setState({
       [e.target.id]: Info
     })
@@ -244,7 +213,6 @@ export default class Tab2 extends Component<userProps> {
           break;
         }
       }
-      //substringsArray.some(substring=>yourBigString.includes(substring))
       let arti = new genshin.ArtifactBuilder()
         .setName(name)
         .position(position)
@@ -264,7 +232,7 @@ export default class Tab2 extends Component<userProps> {
 
   Navigate = (teamid: string, id: string) => {
     this.props.history.push('/teams/' + teamid + '/' + id + '/dmg')
-}
+  }
 
   render() {
     return (
@@ -281,7 +249,7 @@ export default class Tab2 extends Component<userProps> {
         <IonContent fullscreen>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Tab 2</IonTitle>
+              <IonTitle size="large">Damage Calculator</IonTitle>
             </IonToolbar>
           </IonHeader>
 
