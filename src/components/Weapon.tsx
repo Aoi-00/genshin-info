@@ -1,4 +1,4 @@
-import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSelectOption,  } from '@ionic/react'
+import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSelectOption, } from '@ionic/react'
 import defaultimage from '../assets/default.jpeg';
 import React, { useEffect, useState } from 'react'
 import './Weapon.css';
@@ -6,7 +6,7 @@ import './Weapon.css';
 
 interface ContainerProps {
     handleChange: Function;
-    weapon: any;
+    weapon: string;
     refine: string;
     weapLvl: number;
     wepList: Array<any>;
@@ -22,43 +22,45 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
     const [effect, setEffect] = useState("No Effect")
     let tempholder: any = { specialized: 0, attack: 0 }
     const [substat, setSubstat] = useState(tempholder)
-    
+    const [weap, setWeap] = useState(genshindb.weapons(weapon))
 
     useEffect(() => {
-        if (Object.keys(weapon).length !== 0) {
-            let temp = weapon.effect.replace(`{${0}}`, weapon[refine][0]);
-            for (let i = 0; i < weapon[refine].length; i++) {
-                if (weapon[refine].length === 1) {
-                    setEffect(weapon.effect.replace(`{${i}}`, weapon[refine][i]))
-                    return;
-                }
-                else {
-                    if (i !== 0) {
-                        temp = temp.replace(`{${i}}`, weapon[refine][i])
+        if (weapon.length !== 0) {
+            setWeap(genshindb.weapons(weapon));
+            let tempWep = genshindb.weapons(weapon)
+            if (Object.keys(tempWep).length !== 0) {
+                let temp = tempWep.effect.replace(`{${0}}`, tempWep[refine][0]);
+                for (let i = 0; i < tempWep[refine].length; i++) {
+                    if (tempWep[refine].length === 1) {
+                        setEffect(tempWep.effect.replace(`{${i}}`, tempWep[refine][i]))
+                        return;
+                    }
+                    else {
+                        if (i !== 0) {
+                            temp = temp.replace(`{${i}}`, tempWep[refine][i])
+                        }
                     }
                 }
+                setEffect(temp);
             }
-            setEffect(temp);
         }
     }, [refine, weapon])
 
     useEffect(() => {
-        if (Object.keys(weapon).length !== 0) {
+        if (weapon.length !== 0) {
             if (weapLvl !== null) {
-                let tempWeap = genshindb.weapons(weapon.name).stats(weapLvl);
+                let tempWeap = genshindb.weapons(weapon).stats(weapLvl);
                 setSubstat(tempWeap)
             }
         }
-    }, [weapLvl])
-
-    console.log(weapon)
+    }, [weapLvl, weapon])
 
     return (
         <div>
             <IonCard>
                 <IonItem>
                     <IonAvatar slot="start">
-                        <img alt="" src={Object.keys(weapon).length === 0 ? defaultimage : weapon.images.icon} />
+                        <img alt="" src={weap === undefined ? defaultimage : weap.images.icon} />
                     </IonAvatar>
 
                     <IonSelect
@@ -73,7 +75,7 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
 
                             wepList.map((eachWep) => {
                                 return (
-                                    <IonSelectOption key={eachWep.name} value={eachWep}> {eachWep.name} </IonSelectOption>
+                                    <IonSelectOption key={eachWep.name} value={eachWep.name}> {eachWep.name} </IonSelectOption>
                                 )
                             })
                         }
@@ -95,7 +97,7 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
                             >
                                 <IonSelectOption key={"r1"} value="r1"> r1 </IonSelectOption>
                                 <IonSelectOption key={"r2"} value="r2"> r2 </IonSelectOption>
-                                <IonSelectOption key={"r3"}  value="r3"> r3 </IonSelectOption>
+                                <IonSelectOption key={"r3"} value="r3"> r3 </IonSelectOption>
                                 <IonSelectOption key={"r4"} value="r4"> r4 </IonSelectOption>
                                 <IonSelectOption key={"r5"} value="r5"> r5 </IonSelectOption>
                             </IonSelect>
@@ -116,11 +118,11 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
                             </IonSelect>
                         </div>
                         <div className="block">
-                            <h3>Attack: {weapon ? (substat.attack).toFixed(1) : ""} </h3>
+                            <h3>Attack: {weapon.length ? (substat.attack).toFixed(1) : ""} </h3>
                         </div>
                     </div>
-                    <h3> Substat: {weapon ? (weapon?.substat === undefined ? "No substat" : weapon.substat) : "Select a weapon"} {weapon && substat?.specialized !== null ? (substat.specialized < 1 ? (substat.specialized * 100).toFixed(1) : substat.specialized.toFixed(1)) : ''} </h3>
-                    <h3> Effect: {weapon ? (effect?.length === 0 ? "No effect" : effect) : "Select a weapon"}</h3>
+                    <h3> Substat: {weapon.length ? (weap?.substat === undefined ? "No substat" : weap.substat) : "Select a weapon"} {weapon && substat?.specialized !== null ? (substat.specialized < 1 ? (substat.specialized * 100).toFixed(1) : substat.specialized.toFixed(1)) : ''} </h3>
+                    <h3> Effect: {weapon.length ? (effect?.length === 0 ? "No effect" : effect) : "Select a weapon"}</h3>
 
                 </IonCardContent>
             </IonCard>
