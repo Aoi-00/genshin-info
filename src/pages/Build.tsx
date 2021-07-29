@@ -52,6 +52,8 @@ export default class Tab2 extends Component<userProps> {
         })
       }
 
+      
+
       console.log(JSON.parse(retrievedObject))
       //localStorage.setItem("selectedWeapon", selectedWep);
 
