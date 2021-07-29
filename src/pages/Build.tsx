@@ -6,6 +6,7 @@ import React, { Component } from 'react'
 import Weapon from '../components/Weapon';
 import Character from '../components/Character';
 import Artifacts from '../components/Artifacts';
+import { happyOutline } from 'ionicons/icons';
 
 const genshindb = require('genshin-db');
 const genshin = require("genshin_panel");
@@ -41,6 +42,7 @@ export default class Tab2 extends Component<userProps> {
   componentDidMount() {
     this.setState({
       allWep: genshindb.weapons('names', { matchCategories: true })
+      
     })
     var retrievedObject = localStorage.getItem(this.props.location.pathname);
     if (retrievedObject !== null) {
@@ -53,6 +55,48 @@ export default class Tab2 extends Component<userProps> {
           weapLvl: JSON.parse(retrievedObject).weapLvl,
         })
       }
+
+      // if (JSON.parse(retrievedObject).flower.length !== 0) {
+      //   console.log(JSON.parse(retrievedObject))
+      //   this.setState({
+      //     flower: JSON.parse(retrievedObject).flower
+      //   })
+          
+      // } 
+
+      // if (JSON.parse(retrievedObject).feather.length !== 0) {
+      //   console.log(JSON.parse(retrievedObject))
+      //   this.setState({
+      //     feather: JSON.parse(retrievedObject).feather
+      //   })
+
+      // }
+
+      // if (JSON.parse(retrievedObject).cup.length !== 0) {
+      //   console.log(JSON.parse(retrievedObject))
+      //   this.setState({
+      //     cup: JSON.parse(retrievedObject).cup
+      //   })
+
+      // }
+
+      // if (JSON.parse(retrievedObject).sand.length !== 0) {
+
+      //   console.log(JSON.parse(retrievedObject))
+      //   this.setState({
+      //     sand: JSON.parse(retrievedObject).sand
+      //   })
+
+      // }
+
+      // if (JSON.parse(retrievedObject).head.length !== 0) {  
+      //   console.log(JSON.parse(retrievedObject))
+      //   this.setState({
+      //     head: JSON.parse(retrievedObject).head
+      //   })
+
+      // }
+
       this.setState({
         char: JSON.parse(retrievedObject).char,
 
@@ -66,7 +110,13 @@ export default class Tab2 extends Component<userProps> {
         char: this.state.char,
         weap: this.state.weap,
         refine: this.state.refine,
-        weapLvl: this.state.weapLvl
+        weapLvl: this.state.weapLvl,
+        flower: this.state.flower,
+        feather: this.state.feather,
+        cup: this.state.cup,
+        sand: this.state.sand,
+        head: this.state.head
+
       }
       localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
     }
