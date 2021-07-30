@@ -289,7 +289,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         <div>
             <IonCard>
                 <IonCardContent>
-                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. <br/></IonText>
+                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions. <br/></IonText>
                     <div>Attack</div>
                     {
                         combat1 && combat1.map(x => {
