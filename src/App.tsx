@@ -12,7 +12,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { calendar, map, people, square } from 'ionicons/icons';
 import Dailies from './pages/Dailies';
 import Build from './pages/Build';
-import Tab3 from './pages/Tab3';
+import Damage from './pages/Damage';
 import Map from './pages/Map';
 import Teams from './pages/Teams';
 
@@ -44,9 +44,7 @@ const App: React.FC = () => (
           <Route exact path="/dailies" component={Dailies} />
           <Redirect exact from="/" to="/dailies"  />
          
-          
-          <Route exact path="/tab3" component={Tab3}/>
-          <Route exact path="/teams/:teamid/:id/dmg" component={Tab3}/>
+          <Route exact path="/teams/:teamid/:id/dmg" component={Damage}/>
 
           <Route exact path="/map" component={Map}/>
 
@@ -65,10 +63,6 @@ const App: React.FC = () => (
           <IonTabButton tab="tab2" href="/teams">
             <IonIcon icon={people}> </IonIcon>
             <IonLabel>Teams</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="tab3" href="/tab3">
-            <IonIcon icon={square} />
-            <IonLabel>Tab 3</IonLabel>
           </IonTabButton>
           <IonTabButton tab="map" href="/map">
             <IonIcon icon={map} />

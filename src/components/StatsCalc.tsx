@@ -61,7 +61,7 @@ const DmgCalculator: React.FC<ContainerProps> = ({  char, attribute, navigate })
                         <img alt="" src={Object.keys(char).length === 0 ? defaultimage : char.images.icon}></img>
                     </IonAvatar>
                     <IonLabel>{Object.keys(char).length === 0 ? "Choose character" : char.name}</IonLabel>
-                    <IonButton onClick={(e)=> {navigate(team,id)}} fill="outline" slot="end">View More</IonButton>
+                    { Object.keys(attribute).length !== 0 && <IonButton onClick={(e)=> {navigate(team,id)}} fill="outline" slot="end">View More</IonButton>}
                 </IonItem>
 
                 <IonCardContent>

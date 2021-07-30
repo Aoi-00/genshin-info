@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonChip, IonText, IonToggle, } from "@ionic/react";
 import { useEffect, useState } from "react";
 
+
 const genshindb = require('genshin-db');
 
 interface ContainerProps {
@@ -42,7 +43,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             var Json = { name: label[0], dmg: Dmg }
             result.push(Json)
         }
-        //console.log(result)
         return result
     }
 
@@ -62,6 +62,9 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             else if (result[i].includes(":I")) {
                 number[i] = number[i].map((x: number) => Math.round(x))
             }
+            else if (result[i].includes(":F1")) {
+                number[i] = number[i].map((x: number) => (Math.round(x*10)/10).toFixed(1) )
+            }
             format = format.replace(result[i], number[i][Number(level) - 1])
         }
         return format
@@ -69,35 +72,36 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     }
 
     function ApplyAttribute(label: string, format: string, number: any) {
-        if (!["CD", "Energy", "Duration", "Stamina"].some(substring => label.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => label.includes(substring))) {
             if (format.includes("Max HP")) {
-                //console.log(format,number, "multiply by HP") //attribute.life()
                 var name = format.split("Max HP")
-                //console.log(format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * attribute.life()).toString()))
-                return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * attribute.life()).toFixed(0).toString()))
+                return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * ( attribute.lifeStatic + attribute.lifePercentage + attribute.lifeBasic )).toFixed(0).toString()))
             }
             else if (format.includes("DEF")) {
-                //console.log(format,number, "multiply by DEF") //attribute.defend()
                 var name = format.split("DEF")
-                //console.log(format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * attribute.defend()).toString()))
-                return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * attribute.defend()).toFixed(0).toString()))
+                return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * ( attribute.defendStatic + attribute.defendPercentage + attribute.defendBasic ) ).toFixed(0).toString()))
             }
-            else {
-                //console.log(format,number, "multiply by atk") //attribute.attack()
-                let values = format.match(/[0-9]*\.?[0-9]+%/g);
+            else if (format.includes("%")){
+                let values = format.match(/[0-9]*\.?[0-9]+%/g);               
                 let tempString: any;
                 for (var i in values) {
                     if (values[Number(i)].includes('%')) {
                         if (Number(i) === 0) {
-                            tempString = format.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * attribute.attack()).toFixed(0).toString())
+                            tempString = format.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * (( attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic )) ).toFixed(0).toString())
                         }
                         else {
-                            tempString = tempString.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * attribute.attack()).toFixed(0).toString())
+                            tempString = tempString.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * (attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic) ).toFixed(0).toString())
                         }
                     }
                 }
-                //console.log(tempString)
+                if (tempString.includes('×')) {
+                    let values = tempString.match(/[0-9]*\.?[0-9]/g)
+                    return (Number(values[0])*Number(values[1])).toString()
+                }
                 return (tempString)
+            }
+            else {
+                return format
             }
         }
         return format
@@ -106,7 +110,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     function Calculate (values:any, number:any , bonus:any){
         let newValues = [];
         for (var i in values) {
-            newValues.push(Number(values[i]) + Number(values[i]) * attribute[bonus])
+            newValues.push( (Number(values[i]) + Number(values[i]) * attribute[bonus]).toFixed(0) )
         }
         for (var i in newValues) {
             number = number.replace(values[i], newValues[i])
@@ -131,8 +135,9 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                             return number
                         }
                         else {
-                            let value = Number(number);
-                            return (value + value * attribute.aBonus).toString()
+                            let values = number.match(/[0-9]*\.?[0-9]/g);
+                            number = Calculate(values, number, 'aBonus')
+                            return number
                         }
                     }
                     return (number)
@@ -142,27 +147,16 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
                     if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
-                        //let newValues = [];
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
-                            // for (var i in values) {
-                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.eBonus)
-                            // }
-                            // for (var i in newValues) {
-                            //     number = number.replace(values[i], newValues[i])
-                            // }
-                            // return number;
                             number = Calculate(values, number, 'eBonus')
                             return number
                         }
-                        else {
-                            // for (var i in values) {
-                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.cureEffect)
-                            // }
-                            // for (var i in newValues) {
-                            //     number = number.replace(values[i], newValues[i])
-                            // }
-                            // return number;
+                        else if (["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'cureEffect')
+                            return number
+                        }
+                        else if (["Additional Shield"].some(substring => name.includes(substring))){
+                            number = Calculate(values, number, 'shield')
                             return number
                         }
 
@@ -174,26 +168,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
                     if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
-                        let newValues = [];
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
-                            // for (var i in values) {
-                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.qBonus)
-                            // }
-                            // for (var i in newValues) {
-                            //     number = number.replace(values[i], newValues[i])
-                            // }
-                            // return number;
                             number = Calculate(values, number, 'qBonus')
                             return number
                         }
                         else {
-                            // for (var i in values) {
-                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.cureEffect)
-                            // }
-                            // for (var i in newValues) {
-                            //     number = number.replace(values[i], newValues[i])
-                            // }
-                            // return number;
                             number = Calculate(values, number, 'cureEffect')
                             return number
                         }
@@ -205,11 +184,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
 
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec","Shield"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
-                newValues.push(crit ? (Number(values[i]) * attribute.criticalDamage).toFixed(0) : values[i])
+                newValues.push(crit ? (Number(values[i]) * (attribute.criticalDamage+1)).toFixed(0) : values[i])
             }
             for (var i in newValues) {
                 number = number.replace(values[i], newValues[i])
@@ -250,7 +229,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                 Bonus = attribute.physicalBonus
             }
         }
-        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing","Shield"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -289,14 +268,12 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []
                 for (var label of talentDetails[stat].attributes.labels) {
-                    //if (!["CD", "Energy", "Duration"].some(substring => label.includes(substring))) {
                     let Params = getParamList(label)
                     let values = [];
                     for (const param of Params) {
                         values.push(talentDetails[stat].attributes.parameters[param])
                     }
                     talentMultiplier.push({ [label]: values })
-                    //}
                 }
                 allTalents[stat] = talentMultiplier
             }

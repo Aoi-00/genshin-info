@@ -1,12 +1,14 @@
 
 import { IonCard, IonCardContent, IonItem, IonButton, IonAvatar, IonSelect, IonSelectOption, IonInput, IonRow, IonCol } from '@ionic/react'
 import defaultimage from '../assets/default.jpeg';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Artifacts.css';
+
 
 interface ContainerProps {
     handleChange: Function;
     position: string;
+    data:any;
 }
 const customActionSheetOptions = {
     header: 'Options',
@@ -19,7 +21,7 @@ type Stat = {
 }
 
 
-const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
+const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) => {
     const genshindb = require('genshin-db');
     const [artiList, setartiList] = useState(genshindb.artifacts('name', { matchCategories: true }));
     const [mainStat, setMainStat] = useState({} as Stat);
@@ -27,7 +29,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
     const [stat2, setStat2] = useState({} as Stat);
     const [stat3, setStat3] = useState({} as Stat);
     const [stat4, setStat4] = useState({} as Stat);
-    const [set, setArtiSet] = useState<any>({});
+    const [setName, setArtiSet] = useState('');
 
     let slot: string;
     switch (position) {
@@ -53,6 +55,31 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
         }
     }
 
+    useEffect(() => {
+        if (Object.keys(data).length !== 0){
+            setArtiSet(data.set.name)
+            setMainStat({
+                statType: data.mainStat.statType,
+                statValue:data.mainStat.statValue
+            })
+            setStat1({
+                statType: data.stat1.statType,
+                statValue:data.stat1.statValue
+            })
+            setStat2({
+                statType: data.stat2.statType,
+                statValue:data.stat2.statValue
+            })
+            setStat3({
+                statType: data.stat3.statType,
+                statValue:data.stat3.statValue
+            })
+            setStat4({
+                statType: data.stat4.statType,
+                statValue:data.stat4.statValue
+            })
+        }
+    }, [data])
 
     return (
 
@@ -60,13 +87,13 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
             <IonCard>
                 <IonItem>
                     <IonAvatar slot="start">
-                        <img alt="" src={Object.keys(set).length === 0 ? defaultimage : set.images[slot]} />
+                        <img alt="" src={setName.length === 0 ? defaultimage : genshindb.artifacts(setName).images[slot]} />
                     </IonAvatar>
-                    <IonButton onClick={(e) => handleChange(mainStat, stat1, stat2, stat3, stat4, set, position)}
+                    <IonButton onClick={(e) => handleChange(mainStat, stat1, stat2, stat3, stat4, genshindb.artifacts(setName), position)}
                         fill="outline" slot="end">Build</IonButton>
                     <IonSelect
                         className="artiSelect"
-                        id="flower" value={set}
+                        id="flower" value={setName}
                         interfaceOptions={customActionSheetOptions}
                         interface="action-sheet"
                         placeholder="Select Artifact"
@@ -77,7 +104,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                 if (eachArti !== "Glacier and Snowfield" && eachArti !== "Prayers to the Firmament") {
                                     let arti = genshindb.artifacts(eachArti);
                                     return (
-                                        <IonSelectOption key={arti.name} value={arti}> {arti.name} </IonSelectOption>
+                                        <IonSelectOption key={arti.name} value={arti.name}> {arti.name} </IonSelectOption>
                                     )
                                 }
                             }
@@ -101,7 +128,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                 <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
                                 <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
                                 <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                <IonSelectOption value={'recharge'}> Energy Recharge </IonSelectOption>
+                                <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                 <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                 <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
                                 <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption></div>
@@ -144,7 +171,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                     <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
                                     <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
                                     <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Energy Recharge </IonSelectOption>
+                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                     <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                     <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
                                     <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
@@ -171,7 +198,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                     <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
                                     <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
                                     <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Energy Recharge </IonSelectOption>
+                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                     <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                     <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
                                     <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
@@ -185,7 +212,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                             <IonItem>
                                 <IonSelect
                                     className="artiSelect"
-                                    id="stat1"
+                                    id="stat3" value={stat3?.statType}
                                     interfaceOptions={customActionSheetOptions}
                                     interface="action-sheet"
                                     placeholder="Stat 3"
@@ -197,7 +224,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                     <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
                                     <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
                                     <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Energy Recharge </IonSelectOption>
+                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                     <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                     <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
                                     <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
@@ -211,7 +238,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                             <IonItem>
                                 <IonSelect
                                     className="artiSelect"
-                                    id="stat1"
+                                    id="stat4" value={stat4?.statType}
                                     interfaceOptions={customActionSheetOptions}
                                     interface="action-sheet"
                                     placeholder="Stat 4"
@@ -223,7 +250,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position }) => {
                                     <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
                                     <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
                                     <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Energy Recharge </IonSelectOption>
+                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                     <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                     <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
                                     <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>

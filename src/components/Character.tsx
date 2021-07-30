@@ -23,7 +23,6 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
     useEffect(() => {
         if (ele === 'geo' || ele === 'anemo' || ele === 'electro') {
             let list = genshindb.characters(ele, { matchCategories: true });
-            list.push("Aether")
             setCharList(list)
             return charList;
         }

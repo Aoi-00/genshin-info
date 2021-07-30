@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import Weapon from '../components/Weapon';
 import Character from '../components/Character';
 import Artifacts from '../components/Artifacts';
-import { happyOutline } from 'ionicons/icons';
+import { config } from '../components/config';
 
 const genshindb = require('genshin-db');
 const genshin = require("genshin_panel");
@@ -18,19 +18,25 @@ interface userProps {
   history: any;
   location: any
 }
+
 export default class Tab2 extends Component<userProps> {
 
   state = {
-    feather: [],
-    flower: [],
-    sand: [],
-    cup: [],
-    head: [],
+    featherData:{},
+    flowerData:{},
+    sandData: {},
+    cupData: {},
+    headData: {},
     weap: '',
     char: {},
     refine: 'r1',
     weapLvl: 1,
 
+    feather: {},
+    flower: {},
+    sand: {},
+    cup: {},
+    head: {},
     allWep: [],
     wepList: [],
     buildWeap: {},
@@ -42,7 +48,7 @@ export default class Tab2 extends Component<userProps> {
   componentDidMount() {
     this.setState({
       allWep: genshindb.weapons('names', { matchCategories: true })
-      
+
     })
     var retrievedObject = localStorage.getItem(this.props.location.pathname);
     if (retrievedObject !== null) {
@@ -55,46 +61,36 @@ export default class Tab2 extends Component<userProps> {
         })
       }
 
-      // if (JSON.parse(retrievedObject).flower.length !== 0) {
-      //   console.log(JSON.parse(retrievedObject))
-      //   this.setState({
-      //     flower: JSON.parse(retrievedObject).flower
-      //   })
-          
-      // } 
+      if (Object.keys(JSON.parse(retrievedObject).flowerData).length !== 0) {
+        this.setState({
+          flowerData: JSON.parse(retrievedObject).flowerData
+        })
 
-      // if (JSON.parse(retrievedObject).feather.length !== 0) {
-      //   console.log(JSON.parse(retrievedObject))
-      //   this.setState({
-      //     feather: JSON.parse(retrievedObject).feather
-      //   })
+      }
 
-      // }
+      if (Object.keys(JSON.parse(retrievedObject).featherData).length !== 0) {
+        this.setState({
+          featherData: JSON.parse(retrievedObject).featherData
+        })
+      }
 
-      // if (JSON.parse(retrievedObject).cup.length !== 0) {
-      //   console.log(JSON.parse(retrievedObject))
-      //   this.setState({
-      //     cup: JSON.parse(retrievedObject).cup
-      //   })
+      if (Object.keys(JSON.parse(retrievedObject).cupData).length !== 0) {
+        this.setState({
+          cupData: JSON.parse(retrievedObject).cupData
+        })
+      }
 
-      // }
+      if (Object.keys(JSON.parse(retrievedObject).sandData).length !== 0) {
+        this.setState({
+          sandData: JSON.parse(retrievedObject).sandData
+        })
+      }
 
-      // if (JSON.parse(retrievedObject).sand.length !== 0) {
-
-      //   console.log(JSON.parse(retrievedObject))
-      //   this.setState({
-      //     sand: JSON.parse(retrievedObject).sand
-      //   })
-
-      // }
-
-      // if (JSON.parse(retrievedObject).head.length !== 0) {  
-      //   console.log(JSON.parse(retrievedObject))
-      //   this.setState({
-      //     head: JSON.parse(retrievedObject).head
-      //   })
-
-      // }
+      if (Object.keys(JSON.parse(retrievedObject).headData).length !== 0) {  
+        this.setState({
+          headData: JSON.parse(retrievedObject).headData
+        })
+      }
 
       this.setState({
         char: JSON.parse(retrievedObject).char,
@@ -110,18 +106,43 @@ export default class Tab2 extends Component<userProps> {
         weap: this.state.weap,
         refine: this.state.refine,
         weapLvl: this.state.weapLvl,
-        flower: this.state.flower,
-        feather: this.state.feather,
-        cup: this.state.cup,
-        sand: this.state.sand,
-        head: this.state.head
-
+        flowerData: this.state.flowerData,
+        featherData: this.state.featherData,
+        cupData: this.state.cupData,
+        sandData: this.state.sandData,
+        headData: this.state.headData,
+        buildAttributes:this.state.buildAttributes
       }
       localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
     }
   }
 
   componentDidUpdate(prevProp: any, prevState: any, snapShot: any) {
+    if (this.state.flowerData !== prevState.flowerData && Object.keys(this.state.flowerData).length !== 0){
+      let data: any = this.state.flowerData
+      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+    }
+
+    if (this.state.featherData !== prevState.featherData && Object.keys(this.state.featherData).length !== 0){
+      let data: any = this.state.featherData
+      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+    }
+
+    if (this.state.sandData !== prevState.sandData && Object.keys(this.state.sandData).length !== 0){
+      let data: any = this.state.sandData
+      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+    }
+
+    if (this.state.cupData !== prevState.cupData && Object.keys(this.state.cupData).length !== 0){
+      let data: any = this.state.cupData
+      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+    }
+
+    if (this.state.headData !== prevState.headData && Object.keys(this.state.headData).length !== 0){
+      let data: any = this.state.headData
+      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+    }
+
     if (this.state.char !== prevState.char && Object.keys(this.state.char).length !== 0) {
       let charInfo: any = this.state.char;
       var wepList: any[] = [];
@@ -194,22 +215,29 @@ export default class Tab2 extends Component<userProps> {
     }
 
     if (this.state.buildWeap !== prevState.buildWeap || this.state.flower !== prevState.flower || this.state.feather !== prevState.feather || this.state.sand !== prevState.sand || this.state.cup !== prevState.cup || this.state.head !== prevState.head || this.state.buildChar !== prevState.buildChar) {
-      //console.log(this.state.buildChar)
-      if (![this.state.flower, this.state.feather, this.state.cup, this.state.head, this.state.sand, this.state.buildWeap, this.state.buildChar].some(o => Object.keys(o).length === 0)) {
-        let attribute = new genshin.AttributeBuilder()
-          .character(this.state.buildChar)
-          .weapon(this.state.buildWeap)
-          .artifact(this.state.flower)
-          .artifact(this.state.feather)
-          .artifact(this.state.sand)
-          .artifact(this.state.cup)
-          .artifact(this.state.head)
-          .build()
-        this.setState({
-          buildAttributes: attribute
-        })
+      try {
+        if (![this.state.flower, this.state.feather, this.state.cup, this.state.head, this.state.sand, this.state.buildWeap, this.state.buildChar].some(o => Object.keys(o).length === 0)) {
+          let attribute = new genshin.AttributeBuilder()
+            .character(this.state.buildChar)
+            .weapon(this.state.buildWeap)
+            .artifactsConfig(config)
+            .artifact(this.state.flower)
+            .artifact(this.state.feather)
+            .artifact(this.state.sand)
+            .artifact(this.state.cup)
+            .artifact(this.state.head)
+            .build()
+          this.setState({
+            buildAttributes: attribute
+          })
+        }
+      }
+      catch (err) {
+        alert("Please check your artifact inputs")
+        console.log(err)
       }
     }
+
   }
 
   onChange = (e: any) => {
@@ -237,44 +265,66 @@ export default class Tab2 extends Component<userProps> {
     }).replace(/\s+/g, '');
   }
 
-  handleArti = (mainStat: Stat, stat1: Stat, stat2: Stat, stat3: Stat, stat4: Stat, set: any, position: string) => {
-    if (set) {
-      let name;
-      switch (set.name) {
-        case "Crimson Witch of Flames": {
-          name = "crimsonWitch";
-          break;
-        }
-        case "Lavawalker": {
-          name = "lavaWalker";
-          break;
-        }
-        case "The Exile": {
-          name = "exile";
-          break;
-        }
-        case "Wanderer's Troupe": {
-          name = "wandererTroupe";
-          break;
-        }
-        default: {
-          name = this.camelize(set.name);
-          break;
-        }
+  updateArtiData = (mainStat: Stat, stat1: Stat, stat2: Stat, stat3: Stat, stat4: Stat, set: any, position: string) => {
+    let tempName = `${position}Data`
+    this.setState({
+      [tempName]: {
+        mainStat: mainStat,
+        stat1: stat1,
+        stat2: stat2,
+        stat3: stat3,
+        stat4: stat4,
+        set: set,
+        position: position
       }
-      let arti = new genshin.ArtifactBuilder()
-        .setName(name)
-        .position(position)
-        .mainTag(mainStat.statType, ["Bonus", "critical", "Percentage", "recharge"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
-        .tag(stat1.statType, ["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue))
-        .tag(stat2.statType, ["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue))
-        .tag(stat3.statType, ["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue))
-        .tag(stat4.statType, ["critical", "Percentage", "recharge"].some(substring => stat4.statType.includes(substring)) ? parseFloat(stat4.statValue) / 100 : parseFloat(stat4.statValue))
-        .build()
-        ;
-      this.setState({
-        [position]: arti
-      })
+    })
+  }
+  buildArti = (mainStat: Stat, stat1: Stat, stat2: Stat, stat3: Stat, stat4: Stat, set: any, position: string) => {
+    if (set) {
+      try {
+        let name;
+        switch (set.name) {
+          case "Crimson Witch of Flames": {
+            name = "crimsonWitch";
+            break;
+          }
+          case "Lavawalker": {
+            name = "lavaWalker";
+            break;
+          }
+          case "The Exile": {
+            name = "exile";
+            break;
+          }
+          case "Wanderer's Troupe": {
+            name = "wandererTroupe";
+            break;
+          }
+          default: {
+            name = this.camelize(set.name.replace("'s", ""));
+            break;
+          }
+        }
+
+        let arti = new genshin.ArtifactBuilder()
+          .setName(name)
+          .position(position)
+          .mainTag(mainStat.statType, isNaN(["Bonus", "critical", "Percentage", "recharge"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue)) ? 0 : ["Bonus", "critical", "Percentage", "recharge"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
+          .tag(stat1.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue))
+          .tag(stat2.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue))
+          .tag(stat3.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue))
+          .tag(stat4.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat4.statType.includes(substring)) ? parseFloat(stat4.statValue) / 100 : parseFloat(stat4.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat4.statType.includes(substring)) ? parseFloat(stat4.statValue) / 100 : parseFloat(stat4.statValue))
+          .build()
+          ;
+        this.setState({
+          [position]: arti
+        })
+
+        
+      }
+      catch (err) {
+        alert("Cannot build artifact. Please check your artifact input.")
+      }
     }
 
   }
@@ -309,11 +359,11 @@ export default class Tab2 extends Component<userProps> {
           </div>
 
           <div>
-            <Artifacts handleChange={this.handleArti} position={"flower"} />
-            <Artifacts handleChange={this.handleArti} position={"feather"} />
-            <Artifacts handleChange={this.handleArti} position={"cup"} />
-            <Artifacts handleChange={this.handleArti} position={"sand"} />
-            <Artifacts handleChange={this.handleArti} position={"head"} />
+            <Artifacts handleChange={this.updateArtiData} position={"flower"} data={this.state.flowerData}/>
+            <Artifacts handleChange={this.updateArtiData} position={"feather"} data={this.state.featherData} />
+            <Artifacts handleChange={this.updateArtiData} position={"cup"}  data={this.state.cupData}/>
+            <Artifacts handleChange={this.updateArtiData} position={"sand"} data={this.state.sandData} />
+            <Artifacts handleChange={this.updateArtiData} position={"head"}  data={this.state.headData}/>
           </div>
 
           <div>
