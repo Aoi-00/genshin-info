@@ -1,7 +1,6 @@
 import { Redirect, Switch, Route } from 'react-router-dom';
 import {
   IonApp,
-  IonAvatar,
   IonIcon,
   IonLabel,
   IonRouterOutlet,
@@ -10,9 +9,8 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { calendar, ellipse, map, people, square, triangle } from 'ionicons/icons';
-import team from './assets/party-setup.jpg';
-import Tab1 from './pages/Tab1';
+import { calendar, map, people, square } from 'ionicons/icons';
+import Dailies from './pages/Dailies';
 import Build from './pages/Build';
 import Tab3 from './pages/Tab3';
 import Map from './pages/Map';
@@ -43,8 +41,8 @@ const App: React.FC = () => (
       <IonTabs>
         <IonRouterOutlet>
           <Switch>
-          <Route exact path="/tab1" component={Tab1} />
-          <Redirect exact from="/" to="/tab1"  />
+          <Route exact path="/dailies" component={Dailies} />
+          <Redirect exact from="/" to="/dailies"  />
          
           
           <Route exact path="/tab3" component={Tab3}/>

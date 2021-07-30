@@ -1,5 +1,5 @@
-import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
-import { Component, useState } from 'react';
+import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonItemDivider, IonLabel, IonToggle } from '@ionic/react';
+import { Component } from 'react';
 
 import Talents from '../components/Talents';
 import './Tab3.css';
@@ -12,15 +12,72 @@ interface userProps {
   location: any
 }
 
-class Tab3 extends Component<userProps> {
 
+class Tab3 extends Component<userProps> {
   state = {
     level: "1",
     attr: {},
-    char: {}
+    char: {},
   }
- 
+
   componentDidMount() {
+
+    let config = { //always assumes set effect is activated, and at max effect
+      configBraveHeart: {
+        rate: 1, //full Bonus
+      },
+      configInstructor: {
+        rate: 1, //full Bonus
+      },
+      configBerserker: {
+        rate: 1, //full Bonus
+      },
+      configMartialArtist: {
+        rate: 1, //full Bonus
+      },
+      configCrimsonWitch: {
+        level: 3 //max level
+      },
+      configBlizzardStrayer: {
+        criticalBonus: 0.4
+      },
+      configBloodstainedChivalry: {
+        rate: 1, //full Bonus
+      },
+      configNoblesseOblige: {
+        rate: 1, //full Bonus
+      },
+      configHeartOfDepth: {
+        rate: 1, //full Bonus
+      },
+      // ConfigArchaicPetra: {
+      //   element:,
+      //   rate: 1
+      // }
+      configPaleFlame: {
+        level: 2,
+        rate: 1
+      },
+      configRetracingBolide: {
+        rate: 1, //full Bonus
+      },
+      configThunderSmoother: {
+        rate: 1, //full Bonus
+      },
+      configTenacityOfTheMillelith: {
+        rate: 1, //full Bonus
+      },
+      configLavaWalker: {
+        rate: 1, //full Bonus
+      },
+      configMaidenBeloved: {
+        rate: 1, //full Bonus
+      },
+      configShimenawaReminiscence: {
+        rate: 1, //full Bonus
+      },
+    }
+
     let art1 = new genshin.ArtifactBuilder()
       .setName("crimsonWitch")      // 如雷的盛怒
       .position("flower")             // 生之花
@@ -71,19 +128,20 @@ class Tab3 extends Component<userProps> {
     let test = new genshin.AttributeBuilder()
       .character(testchar)
       .weapon(testWeap)
+      .artifactsConfig(config)
       .artifact(art1)
       .artifact(art2)
       .artifact(art3)
       .artifact(art4)
       .artifact(art5)
       .build()
-    
+
 
     this.setState({
       attr: test
     })
 
-    var retrievedObject = localStorage.getItem(this.props.location.pathname.slice(0,-4));
+    var retrievedObject = localStorage.getItem(this.props.location.pathname.slice(0, -4));
     if (retrievedObject !== null) {
       this.setState({
         char: JSON.parse(retrievedObject).char
@@ -98,7 +156,7 @@ class Tab3 extends Component<userProps> {
 
   handleChange = (e: any) => {
     this.setState({
-      [e.target.id] : e.target.value
+      [e.target.id]: e.target.value
     })
   }
 
@@ -108,19 +166,18 @@ class Tab3 extends Component<userProps> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
-            <IonTitle>Tab 3</IonTitle>
+            <IonTitle>Damage</IonTitle>
             <IonButtons slot="start">
-              <IonBackButton defaultHref={this.props.location.pathname.slice(0,-4)} />
+              <IonBackButton defaultHref={this.props.location.pathname.slice(0, -4)} />
             </IonButtons>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Tab 3</IonTitle>
+              <IonTitle size="large">Damage</IonTitle>
             </IonToolbar>
           </IonHeader>
-
           <Talents char={this.state.char} attribute={this.state.attr} level={this.state.level} />
           <IonItem>
             <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>

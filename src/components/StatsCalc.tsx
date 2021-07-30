@@ -3,9 +3,6 @@ import { IonRow, IonCol, IonLabel, IonCard, IonCardContent, IonItem,  IonAvatar,
 import defaultimage from '../assets/default.jpeg';
 import { useLocation } from 'react-router';
 
-const genshin = require("genshin_panel");
-const genshindb = require('genshin-db');
-
 interface ContainerProps {
     
     char: any;

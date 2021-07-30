@@ -46,7 +46,6 @@ export default class Tab2 extends Component<userProps> {
     if (retrievedObject !== null) {
 
       if (JSON.parse(retrievedObject).weap.length !== 0) {
-        console.log(JSON.parse(retrievedObject))
         this.setState({
           weap: JSON.parse(retrievedObject).weap,
           refine: JSON.parse(retrievedObject).refine,

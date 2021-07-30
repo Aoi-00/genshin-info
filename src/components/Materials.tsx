@@ -25,8 +25,7 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
     talentMatResults && talentMatResults.map((each: any[]) => {
         const test = allMat.filter(eachItem => eachItem.name.includes(each));
         if (test.length !== 0){
-            return (
-            
+            return (           
                 talentMat.push(test)
             )
         }        

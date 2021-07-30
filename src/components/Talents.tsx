@@ -1,18 +1,13 @@
-import { IonCard, IonCardContent, } from "@ionic/react";
+import { IonCard, IonCardContent, IonChip, IonText, IonToggle, } from "@ionic/react";
 import { useEffect, useState } from "react";
 
-const genshin = require("genshin_panel");
 const genshindb = require('genshin-db');
 
 interface ContainerProps {
-
     char: any;
     attribute: any;
     level: string;
-
 }
-
-
 
 const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     function getParamName(label: string, occurence: number) {
@@ -41,29 +36,22 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         let result: { name: string; dmg: any; }[] = [];
         for (var i in arr) {
             var val = arr[i];
-            //console.log(val)
-            //let Json: {name: any; dmg:[]} ;
             var label = Object.keys(val)[0].split("|");
             var formattedResult = FormatNumber(label[1], Object.values(val)[0])
-            ApplyBonus(label[0] ,formattedResult, Object.values(val)[0])
-            var Json = { name: label[0], dmg: formattedResult }
+            var Dmg = ApplyAttribute(label[0], formattedResult, Object.values(val)[0])
+            var Json = { name: label[0], dmg: Dmg }
             result.push(Json)
-
         }
         //console.log(result)
         return result
     }
 
 
-
     function FormatNumber(format: string, number: any) {
         var result: any = format.match(/{.+?}/g)
-        //console.log(result,number)
         for (var i in result) {
-            //console.log(result[i],number[i])
             if (result[i].includes(":P")) {
                 number[i] = number[i].map((x: number) => (x * 100).toFixed(1) + '%')
-                //console.log(number[i])
             }
             else if (result[i].includes(":F1P")) {
                 number[i] = number[i].map((x: number) => Number((x * 100).toFixed(1)) + '%')
@@ -80,47 +68,212 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
 
     }
 
-    function ApplyBonus(label:string ,format: string, number: any) {
+    function ApplyAttribute(label: string, format: string, number: any) {
         if (!["CD", "Energy", "Duration", "Stamina"].some(substring => label.includes(substring))) {
             if (format.includes("Max HP")) {
                 //console.log(format,number, "multiply by HP") //attribute.life()
                 var name = format.split("Max HP")
-                console.log(format.replace(name[0] + "Max HP", (Number(name[0].replace('%',""))/100 * attribute.life()).toString()))
+                //console.log(format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * attribute.life()).toString()))
+                return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * attribute.life()).toFixed(0).toString()))
             }
             else if (format.includes("DEF")) {
                 //console.log(format,number, "multiply by DEF") //attribute.defend()
                 var name = format.split("DEF")
-                console.log(format.replace(name[0] + "DEF", (Number(name[0].replace('%',""))/100 * attribute.defend()).toString()))
+                //console.log(format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * attribute.defend()).toString()))
+                return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * attribute.defend()).toFixed(0).toString()))
             }
             else {
                 //console.log(format,number, "multiply by atk") //attribute.attack()
-                let values = format.match(/[0-9]*\.?[0-9]+%/g); 
-                let tempString:any;
-                for ( var i in values) {
-                    if (values[Number(i)].includes('%')){
+                let values = format.match(/[0-9]*\.?[0-9]+%/g);
+                let tempString: any;
+                for (var i in values) {
+                    if (values[Number(i)].includes('%')) {
                         if (Number(i) === 0) {
-                            tempString =  format.replace( values[Number(i)], (Number(values[Number(i)].replace('%',""))/100 * attribute.attack()).toFixed(0).toString() ) 
+                            tempString = format.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * attribute.attack()).toFixed(0).toString())
                         }
                         else {
-                            tempString = tempString.replace( values[Number(i)], (Number(values[Number(i)].replace('%',""))/100 * attribute.attack()).toFixed(0).toString() ) 
+                            tempString = tempString.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * attribute.attack()).toFixed(0).toString())
                         }
                     }
                 }
-                console.log(tempString)
+                //console.log(tempString)
+                return (tempString)
             }
         }
+        return format
     }
 
-    function ApplyEleBonus (skillName:string, number:any){
-        //search for DMG or exclude Regeneration/Healing (apply curedEffect/cureEffect)
-        attribute.filter((x: any)=> x.name.includes("bonus").map((each: any) => {
-            console.log(each)
-        }))
+    function Calculate (values:any, number:any , bonus:any){
+        let newValues = [];
+        for (var i in values) {
+            newValues.push(Number(values[i]) + Number(values[i]) * attribute[bonus])
+        }
+        for (var i in newValues) {
+            number = number.replace(values[i], newValues[i])
+        }
+        return number
     }
+
+    function ApplyDMGBonus(type: string, name: string, number: any) {
+        switch (type) {
+            case ('b'):
+                {
+                    //apply a = normal atk, b = charged atk, air = plunge
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                        if (name.includes("Plunge")) {
+                            let values = number.match(/[0-9]*\.?[0-9]/g);
+                            number = Calculate(values, number, 'aBonus')
+                            return number
+                        }
+                        else if (name.includes("Charged")) {
+                            let values = number.match(/[0-9]*\.?[0-9]/g);
+                            number = Calculate(values, number, 'bBonus')
+                            return number
+                        }
+                        else {
+                            let value = Number(number);
+                            return (value + value * attribute.aBonus).toString()
+                        }
+                    }
+                    return (number)
+                }
+            case ('e'):
+                {
+                    //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                        let values = number.match(/[0-9]*\.?[0-9]/g);
+                        //let newValues = [];
+                        if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
+                            // for (var i in values) {
+                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.eBonus)
+                            // }
+                            // for (var i in newValues) {
+                            //     number = number.replace(values[i], newValues[i])
+                            // }
+                            // return number;
+                            number = Calculate(values, number, 'eBonus')
+                            return number
+                        }
+                        else {
+                            // for (var i in values) {
+                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.cureEffect)
+                            // }
+                            // for (var i in newValues) {
+                            //     number = number.replace(values[i], newValues[i])
+                            // }
+                            // return number;
+                            number = Calculate(values, number, 'cureEffect')
+                            return number
+                        }
+
+                    }
+                    return number;
+                }
+            case ('q'):
+                {
+                    //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                        let values = number.match(/[0-9]*\.?[0-9]/g);
+                        let newValues = [];
+                        if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
+                            // for (var i in values) {
+                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.qBonus)
+                            // }
+                            // for (var i in newValues) {
+                            //     number = number.replace(values[i], newValues[i])
+                            // }
+                            // return number;
+                            number = Calculate(values, number, 'qBonus')
+                            return number
+                        }
+                        else {
+                            // for (var i in values) {
+                            //     newValues.push(Number(values[i]) + Number(values[i]) * attribute.cureEffect)
+                            // }
+                            // for (var i in newValues) {
+                            //     number = number.replace(values[i], newValues[i])
+                            // }
+                            // return number;
+                            number = Calculate(values, number, 'cureEffect')
+                            return number
+                        }
+
+                    }
+                    return number;
+                }
+        }
+
+    }
+    function ApplyCrit(name: string, number: any, crit: boolean) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec"].some(substring => name.includes(substring))) {
+            let values = number.match(/[0-9]*\.?[0-9]/g);
+            let newValues = [];
+            for (var i in values) {
+                newValues.push(crit ? (Number(values[i]) * attribute.criticalDamage).toFixed(0) : values[i])
+            }
+            for (var i in newValues) {
+                number = number.replace(values[i], newValues[i])
+            }
+            return number;
+        }
+        return number;
+    }
+
+    function ApplyEleBonus(name: string, number: any, ele: boolean) {
+        var Bonus;
+        switch (char.element) {
+            case ('Anemo'): {
+                Bonus = attribute.windBonus ? attribute.windBonus : attribute.physicalBonus;
+                break;
+            }
+            case ('Cryo'): {
+                Bonus = attribute.iceBonus ? attribute.iceBonus : attribute.physicalBonus;
+                break;
+            }
+            case ('Electro'): {
+                Bonus = attribute.thunderBonus ? attribute.thunderBonus : attribute.physicalBonus;;
+                break;
+            }
+            case ('Geo'): {
+                Bonus = attribute.rockBonus ? attribute.rockBonus : attribute.physicalBonus;;
+                break;
+            }
+            case ('Hydro'): {
+                Bonus = attribute.waterBonus ? attribute.waterBonus : attribute.physicalBonus;;
+                break;
+            }
+            case ('Pyro'): {
+                Bonus = attribute.fireBonus ? attribute.fireBonus : attribute.physicalBonus;;
+                break;
+            }
+            default: {
+                Bonus = attribute.physicalBonus
+            }
+        }
+        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing"].some(substring => name.includes(substring))) {
+            let values = number.match(/[0-9]*\.?[0-9]/g);
+            let newValues = [];
+            for (var i in values) {
+                newValues.push(ele ? (Number(values[i]) * (Bonus+1)).toFixed(0) : values[i])
+            }
+            for (var i in newValues) {
+                number = number.replace(values[i], newValues[i])
+            }
+            return number;
+        }
+        return number;
+    }
+
 
     const [combat1, setCombat1] = useState(Array());
     const [combat2, setCombat2] = useState(Array());
     const [combat3, setCombat3] = useState(Array());
+    const [bCrit, setbCrit] = useState(false);
+    const [bEle, setbEle] = useState(false);
+    const [eCrit, seteCrit] = useState(false);
+    const [eEle, seteEle] = useState(false);
+    const [qCrit, setqCrit] = useState(false);
+    const [qEle, setqEle] = useState(false);
     const [talentLvl, setTalentLvl] = useState('1');
 
     useEffect(() => {
@@ -130,7 +283,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     }, [level])
 
     useEffect(() => {
-        //console.log(char)
         if (Object.keys(char).length !== 0 && Object.keys(attribute).length !== 0) {
             let talentDetails: { [key: string]: any } = genshindb.talents(char.name)
             let allTalents: { [key: string]: any } = {};
@@ -151,9 +303,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             setCombat1(FilterText(allTalents.combat1))
             setCombat2(FilterText(allTalents.combat2))
             setCombat3(FilterText(allTalents.combat3))
-            // console.log(combat1)
-            // console.log(combat2)
-            // console.log(combat3)
         }
     }, [char, level])
 
@@ -163,32 +312,61 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         <div>
             <IonCard>
                 <IonCardContent>
-                    Attack
+                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. <br/></IonText>
+                    <div>Attack</div>
                     {
                         combat1 && combat1.map(x => {
                             return (
-                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name, ApplyCrit(x.name, ApplyDMGBonus('b', x.name, x.dmg), bCrit), bEle)} </p>
                             )
                         })
                     }
+                    <IonChip>
+                        Crit
+                        <IonToggle color="primary" checked={bCrit} onIonChange={(e) => setbCrit(!bCrit)} />
+                    </IonChip>
+
+                    <IonChip>
+                        Ele Bonus
+                        <IonToggle color="primary" checked={bEle} onIonChange={(e) => setbEle(!bEle)} />
+                    </IonChip>
+
                     <br />
                     Elemental Skill
                     {
                         combat2 && combat2.map(x => {
                             return (
-                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name,ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), eCrit),eEle) } </p>
                             )
                         })
                     }
+                    <IonChip>
+                        Crit
+                        <IonToggle color="primary" checked={eCrit} onIonChange={(e) => seteCrit(!eCrit)} />
+                    </IonChip>
+
+                    <IonChip>
+                        Ele Bonus
+                        <IonToggle color="primary" checked={eEle} onIonChange={(e) => seteEle(!eEle)} />
+                    </IonChip>
                     <br />
                     Elemental Burst
                     {
                         combat3 && combat3.map(x => {
                             return (
-                                <p key={x.name}>{x.name}: {x.dmg.includes('undefined') ? "" : x.dmg} </p>
+                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name,ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), qCrit), qEle)} </p>
                             )
                         })
                     }
+                    <IonChip>
+                        Crit
+                        <IonToggle color="primary" checked={qCrit} onIonChange={(e) => setqCrit(!qCrit)} />
+                    </IonChip>
+
+                    <IonChip>
+                        Ele Bonus
+                        <IonToggle color="primary" checked={qEle} onIonChange={(e) => setqEle(!qEle)} />
+                    </IonChip>
                 </IonCardContent>
             </IonCard>
         </div>

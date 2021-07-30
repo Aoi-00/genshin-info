@@ -1,5 +1,5 @@
-import {  IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonRow, IonGrid, IonCol } from '@ionic/react';
-import './Tab1.css';
+import {  IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import './Dailies.css';
 import React, { Component } from 'react';
 import Materials from '../components/Materials';
 import Dates from '../components/Dates';

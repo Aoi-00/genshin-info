@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { IonRow, IonCol, IonAvatar, IonGrid, IonItem, IonButton, IonCard, IonCardContent,IonText } from '@ionic/react'
+import React from 'react'
+import { IonRow,  IonAvatar, IonItem, IonButton, IonCard, IonCardContent,IonText } from '@ionic/react'
 import './Party.css';
 import defaultAvatar from '../assets/defaultAvatar.jpg'
 import { MDBCol } from 'mdbreact';
