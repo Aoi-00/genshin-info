@@ -2,6 +2,7 @@ import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSe
 import defaultimage from '../assets/default.jpeg';
 import React, { useEffect, useState } from 'react'
 import './Weapon.css';
+import {customActionSheetOptions} from '../components/customActionSheetOptions';
 
 
 interface ContainerProps {
@@ -11,11 +12,6 @@ interface ContainerProps {
     weapLvl: number;
     wepList: Array<any>;
 }
-
-const customActionSheetOptions = {
-    header: 'Options',
-    subHeader: 'Select your choice'
-};
 
 const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLvl, wepList }) => {
     const genshindb = require('genshin-db');

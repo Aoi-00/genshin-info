@@ -1,0 +1,218 @@
+[
+    {
+        "subStats": "Base HP",
+        "val": "lifeBasic"
+    },
+    {
+        "subStats": "Base DEF",
+        "val": "defendBasic"
+    },
+    {
+        "subStats": "Base ATK",
+        "val": "attackBasic"
+    },
+    {
+        "subStats": "HP",
+        "val": "lifeStatic"
+    },
+    {
+        "subStats": "DEF",
+        "val": "defendStatic"
+    },
+    {
+        "subStats": "ATK",
+        "val": "attackStatic"
+    },
+    {
+        "subStats": "HP%",
+        "val": "lifePercentage"
+    },
+    {
+        "subStats": "DEF%",
+        "val": "defendPercentage"
+    },
+    {
+        "subStats": "ATK%",
+        "val": "attackPercentage"
+    },
+    {
+        "subStats": "EM",
+        "val": "elementalMastery"
+    },
+    {
+        "subStats": "ER",
+        "val": "recharge"
+    },
+    {
+        "subStats": "Crit%",
+        "val": "critical"
+    },
+    {
+        "subStats": "Crit DMG",
+        "val": "criticalDamage"
+    },
+    {
+        "subStats": "Healing Bonus",
+        "val":"cureEffect"
+    },
+    {
+        "subStats": "Incoming Healing Bonus",
+        "val":"curedEffect"
+    },
+    {
+        "subStats": "Charged Crit",
+        "val":"bCritical"
+    },
+    {
+        "subStats": "Charged Bonus",
+        "val":"bBonus"
+    },
+    {
+        "subStats": "Normal Crit",
+        "val":"aCritical"
+    },
+    {
+        "subStats": "Normal Bonus",
+        "val":"aBonus"
+    },
+    {
+        "subStats": "Plunge Bonus",
+        "val":"airBonus"
+    },
+    {
+        "subStats": "Plunge Crit",
+        "val":"airCritical"
+    },
+    {
+        "subStats": "E Crit",
+        "val":"eCritical"
+    },
+    {
+        "subStats": "E Bonus",
+        "val":"eBonus"
+    },
+    {
+        "subStats": "Q Bonus",
+        "val":"qBonus"
+    },
+    {
+        "subStats": "Q Crit",
+        "val":"qCritical"
+    },
+    {
+        "subStats": "Bonus",
+        "val":"bonus"
+    },
+    {
+        "subStats": "Anemo Bonus",
+        "val":"windBonus"
+    },
+    {
+        "subStats": "Anemo RES",
+        "val":"windRes"
+    },
+    {
+        "subStats": "Pyro Bonus",
+        "val":"fireBonus"
+    },
+    {
+        "subStats": "Pyro RES",
+        "val":"fireRes"
+    },
+    {
+        "subStats": "Geo Bonus",
+        "val":"rockBonus"
+    },
+    {
+        "subStats": "Geo RES",
+        "val":"rockRes"
+    },
+    {
+        "subStats": "Hydro Bonus",
+        "val":"waterBonus"
+    },
+    {
+        "subStats": "Hydro RES",
+        "val":"waterRes"
+    },
+    {
+        "subStats": "Electro Bonus",
+        "val":"thunderBonus"
+    },
+    {
+        "subStats": "Electro RES",
+        "val":"thunderRes"
+    },
+    {
+        "subStats": "Cryo Bonus",
+        "val":"iceBonus"
+    },
+    {
+        "subStats": "Cryo RES",
+        "val":"iceRes"
+    },
+    {
+        "subStats": "Physical Bonus",
+        "val":"physicalBonus"
+    },
+    {
+        "subStats": "Dendro RES",
+        "val":"grassRes"
+    },
+    {
+        "subStats": "Dendro Bonus",
+        "val":"grassBonus"
+    },
+    {
+        "subStats": "Shield Bonus",
+        "val":"shield"
+    },
+    {
+        "subStats": "Overload%",
+        "val":"overloadEnhance"
+    },
+    {
+        "subStats": "Burning%",
+        "val":"burningEnhance"
+    },
+    {
+        "subStats": "Electro%",
+        "val":"electroEnhance"
+    },
+    {
+        "subStats": "SuperConduct%",
+        "val":"superconductEnhance"
+    },
+    {
+        "subStats": "Electro Swirl%",
+        "val":"swirlThunderEnhance"
+    },
+    {
+        "subStats": "Pyro Swirl%",
+        "val":"swirlFireEnhance"
+    },
+    {
+        "subStats": "Hydro Swirl%",
+        "val":"swirlWaterEnhance"
+    },
+    {
+        "subStats": "Cryo Swirl%",
+        "val":"swirlIceEnhance"
+    },
+    {
+        "subStats": "Swirl%",
+        "val":"swirlEnhance"
+    },
+    {
+        "subStats": "Vape%",
+        "val":"vaporizeEnhance"
+    },
+    {
+        "subStats": "Melt%",
+        "val":"meltEnhance"
+    },
+    {
+        "subStats": "Movement SPD",
+        "val":"moveSpeed"
+    }
+]

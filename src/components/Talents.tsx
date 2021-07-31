@@ -184,7 +184,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
 
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec","Shield"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec","Shield","Life Drain"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -229,7 +229,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                 Bonus = attribute.physicalBonus
             }
         }
-        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing","Shield"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing","Shield","Life Drain"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -289,7 +289,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         <div>
             <IonCard>
                 <IonCardContent>
-                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions. <br/></IonText>
+                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions/special weapon passives or skill perks. <br/></IonText>
                     <div>Attack</div>
                     {
                         combat1 && combat1.map(x => {

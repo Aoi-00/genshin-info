@@ -3,6 +3,7 @@ import { IonCard, IonCardContent, IonItem, IonButton, IonAvatar, IonSelect, IonS
 import defaultimage from '../assets/default.jpeg';
 import React, { useEffect, useState } from 'react';
 import './Artifacts.css';
+import {customActionSheetOptions} from '../components/customActionSheetOptions';
 
 
 interface ContainerProps {
@@ -10,10 +11,7 @@ interface ContainerProps {
     position: string;
     data:any;
 }
-const customActionSheetOptions = {
-    header: 'Options',
-    subHeader: 'Select your choice'
-};
+
 
 type Stat = {
     statType: string,

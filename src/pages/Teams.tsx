@@ -15,8 +15,6 @@ export default class Teams extends Component<userProps> {
     }
 
     componentDidMount() {
-        //this.props.history.push('/tab1')
-        //console.log("mount Teams")
         let team1: any[] = [], team2: any[] = [], team3: any[] = [], team4: any[] = [];
         for (var key in localStorage) {
             if (key.includes('/teams/')) {
@@ -52,16 +50,9 @@ export default class Teams extends Component<userProps> {
         })
     }
 
-    componentDidUpdate(){
-        //console.log(this.state)
-    }
-
-    componentWillUnmount() {
-        //console.log("unmount Teams")
-    }
     Navigate = (teamid: string, id: string) => {
-        // this.props.history.push('/teams/' + teamid + '/' + id)
-        this.props.history.push('/artifact/')
+        this.props.history.push('/teams/' + teamid + '/' + id)
+        //this.props.history.push('/artifact/')
     }
 
     handleChange = (e: any) => {

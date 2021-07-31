@@ -1,6 +1,6 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Build.css';
-import DmgCalculator from '../components/StatsCalc';
+import StatsCalc from '../components/StatsCalc';
 
 import React, { Component } from 'react'
 import Weapon from '../components/Weapon';
@@ -31,6 +31,8 @@ export default class Tab2 extends Component<userProps> {
     char: {},
     refine: 'r1',
     weapLvl: 1,
+    charLvl:'20',
+    charConst:0,
 
     feather: {},
     flower: {},
@@ -94,7 +96,8 @@ export default class Tab2 extends Component<userProps> {
 
       this.setState({
         char: JSON.parse(retrievedObject).char,
-
+        charLvl:JSON.parse(retrievedObject).charLvl,
+        charConst:JSON.parse(retrievedObject).charConst
       })
     }
   }
@@ -106,6 +109,8 @@ export default class Tab2 extends Component<userProps> {
         weap: this.state.weap,
         refine: this.state.refine,
         weapLvl: this.state.weapLvl,
+        charLvl:this.state.charLvl,
+        charConst:this.state.charConst,
         flowerData: this.state.flowerData,
         featherData: this.state.featherData,
         cupData: this.state.cupData,
@@ -143,7 +148,7 @@ export default class Tab2 extends Component<userProps> {
       this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
     }
 
-    if (this.state.char !== prevState.char && Object.keys(this.state.char).length !== 0) {
+    if ((this.state.char !== prevState.char && Object.keys(this.state.char).length !== 0) || (this.state.charConst !== prevState.charConst) || (this.state.charLvl !== prevState.charLvl) ) {
       let charInfo: any = this.state.char;
       var wepList: any[] = [];
       let tempWepList = genshindb.weapons(charInfo['weapontype'], { matchCategories: true })
@@ -154,19 +159,10 @@ export default class Tab2 extends Component<userProps> {
       this.setState({
         wepList: wepList
       })
-      //name, level, ascended, const TODO: allow level,ascend,const changes
-      if (charInfo.name !== "Aether") {
-        let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), 90, false, 0);
+        let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), this.state.charLvl.replace("+",""), this.state.charLvl.includes("+"), this.state.charConst);
         this.setState({
           buildChar: char
         })
-      }
-      else {
-        let char = new genshin.Character('me_geo', 90, false, 0);
-        this.setState({
-          buildChar: char
-        })
-      }
     }
 
     if (this.state.weap !== prevState.weap) {
@@ -367,7 +363,7 @@ export default class Tab2 extends Component<userProps> {
           </div>
 
           <div>
-            <DmgCalculator char={this.state.char} attribute={this.state.buildAttributes} navigate={this.Navigate} />
+            <StatsCalc handleChange={this.onChange} char={this.state.char} attribute={this.state.buildAttributes} navigate={this.Navigate} charLvl={this.state.charLvl} charConst = {this.state.charConst} />
           </div>
 
         </IonContent>

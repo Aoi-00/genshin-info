@@ -1,8 +1,9 @@
 import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCol, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonRange, IonRow, IonSelect, IonSelectOption, IonTitle, IonToolbar } from '@ionic/react';
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import flowerMainStats from '../data/flower.json'
 import plumeMainStats from '../data/plume.json'
 import artifactSubStats from '../data/substats.json'
+import defaultImage from '../assets/default.jpeg'
 
 class Artifact extends Component {
     state = {
@@ -11,7 +12,7 @@ class Artifact extends Component {
             {
                 "mainStatsName": "HP",
                 "mainStatsVal": 717,
-                "image": "#",
+                "image": defaultImage,
                 "level": 0,
                 "sub1Name": "",
                 "sub1val": "",
@@ -25,7 +26,7 @@ class Artifact extends Component {
             {
                 "mainStatsName": "ATK",
                 "mainStatsVal": 47,
-                "image": "#",
+                "image": defaultImage,
                 "level": 0,
                 "sub1Name": "",
                 "sub1val": "",
@@ -39,7 +40,7 @@ class Artifact extends Component {
             {
                 "mainStatsName": "ATK",
                 "mainStatsVal": 47,
-                "image": "#",
+                "image": defaultImage,
                 "level": 0,
                 "sub1Name": "",
                 "sub1val": "",
@@ -53,7 +54,7 @@ class Artifact extends Component {
             {
                 "mainStatsName": "ATK",
                 "mainStatsVal": 47,
-                "image": "#",
+                "image": defaultImage,
                 "level": 0,
                 "sub1Name": "",
                 "sub1val": "",
@@ -67,7 +68,7 @@ class Artifact extends Component {
             {
                 "mainStatsName": "ATK",
                 "mainStatsVal": 47,
-                "image": "#",
+                "image": defaultImage,
                 "level": 0,
                 "sub1Name": "",
                 "sub1val": "",
