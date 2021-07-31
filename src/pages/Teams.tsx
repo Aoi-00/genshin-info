@@ -60,7 +60,8 @@ export default class Teams extends Component<userProps> {
         //console.log("unmount Teams")
     }
     Navigate = (teamid: string, id: string) => {
-        this.props.history.push('/teams/' + teamid + '/' + id)
+        // this.props.history.push('/teams/' + teamid + '/' + id)
+        this.props.history.push('/artifact/')
     }
 
     handleChange = (e: any) => {

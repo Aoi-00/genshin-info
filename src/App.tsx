@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Artifact from './pages/Artifact';
 
 const App: React.FC = () => (
   <IonApp>
@@ -50,6 +51,7 @@ const App: React.FC = () => (
 
           <Route exact path="/teams" component={Teams}/>
           <Route exact path="/teams/:teamid/:id" component={Build}/>
+          <Route exact path="/artifact" component={Artifact}/>
 
           <Route render={() => <h1>Not Found</h1>} />
           </Switch>

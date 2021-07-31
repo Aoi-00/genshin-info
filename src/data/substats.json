@@ -1,0 +1,42 @@
+[
+    {
+        "subStats": "HP",
+        "val": "lifeStatic"
+    },
+    {
+        "subStats": "DEF",
+        "val": "defendStatic"
+    },
+    {
+        "subStats": "ATK",
+        "val": "attackStatic"
+    },
+    {
+        "subStats": "HP%",
+        "val": "lifePercentage"
+    },
+    {
+        "subStats": "DEF%",
+        "val": "defendPercentage"
+    },
+    {
+        "subStats": "ATK%",
+        "val": "attackPercentage"
+    },
+    {
+        "subStats": "EM",
+        "val": "elementalMastery"
+    },
+    {
+        "subStats": "ER",
+        "val": "energyRecharge"
+    },
+    {
+        "subStats": "Crit%",
+        "val": "critical"
+    },
+    {
+        "subStats": "Crit DMG",
+        "val": "criticalDamage"
+    }
+]
