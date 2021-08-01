@@ -1,11 +1,11 @@
 import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Build.css';
-import StatsCalc from '../components/StatsCalc';
+import StatsCalc from '../components/Build/StatsCalc';
 
 import React, { Component } from 'react'
-import Weapon from '../components/Weapon';
-import Character from '../components/Character';
-import Artifacts from '../components/Artifacts';
+import Weapon from '../components/Build/Weapon';
+import Character from '../components/Build/Character';
+import Artifacts from '../components/Build/Artifacts';
 import { config } from '../components/config';
 
 const genshindb = require('genshin-db');

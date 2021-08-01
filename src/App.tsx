@@ -9,7 +9,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { calendar, map, people, square } from 'ionicons/icons';
+import { calendar, map, people } from 'ionicons/icons';
 import Dailies from './pages/Dailies';
 import Build from './pages/Build';
 import Damage from './pages/Damage';

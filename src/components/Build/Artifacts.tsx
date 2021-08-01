@@ -1,9 +1,9 @@
 
 import { IonCard, IonCardContent, IonItem, IonButton, IonAvatar, IonSelect, IonSelectOption, IonInput, IonRow, IonCol } from '@ionic/react'
-import defaultimage from '../assets/default.jpeg';
+import defaultimage from '../../assets/default.jpeg';
 import React, { useEffect, useState } from 'react';
 import './Artifacts.css';
-import {customActionSheetOptions} from '../components/customActionSheetOptions';
+import {customActionSheetOptions} from '../customActionSheetOptions';
 
 
 interface ContainerProps {

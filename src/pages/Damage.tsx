@@ -1,5 +1,6 @@
-import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonItemDivider, IonLabel, IonToggle } from '@ionic/react';
+import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
 import { Component } from 'react';
+import Mob from '../components/Mob';
 
 import Talents from '../components/Talents';
 import './Damage.css';
@@ -16,6 +17,9 @@ class Tab3 extends Component<userProps> {
     level: "1",
     attr: {},
     char: {},
+    charLvl: "1",
+    enemyLvl: "1",
+    DMGReduction:1
   }
 
   componentDidMount() {
@@ -23,8 +27,28 @@ class Tab3 extends Component<userProps> {
     if (retrievedObject !== null) {
       this.setState({
         char: JSON.parse(retrievedObject).char,
-        attr: JSON.parse(retrievedObject).buildAttributes
+        attr: JSON.parse(retrievedObject).buildAttributes,
+        charLvl: JSON.parse(retrievedObject).charLvl,
       })
+    }
+    var enemyLvl = localStorage.getItem("enemyLvl")
+    if (enemyLvl !== null) {
+      this.setState({enemyLvl: enemyLvl})
+    }
+  }
+
+  componentDidUpdate(prevProps: any, prevState: any, prevSnapShot: any) {
+    if (this.state.enemyLvl !== prevState.enemyLvl || this.state.charLvl !== prevState.charLvl) {
+      if (this.state.enemyLvl.length !== 0) {
+        var DMGReduction = (Number(this.state.charLvl) + 100) / (Number(this.state.charLvl) + Math.max(1,Number(this.state.enemyLvl)) + 200);
+        this.setState({DMGReduction: DMGReduction})
+      }
+    }
+  }
+
+  componentWillUnmount(){
+    if (this.state.enemyLvl.length !== 0){
+      localStorage.setItem('enemyLvl',this.state.enemyLvl)
     }
   }
 
@@ -51,7 +75,8 @@ class Tab3 extends Component<userProps> {
               <IonTitle size="large">Damage</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <Talents char={this.state.char} attribute={this.state.attr} level={this.state.level} />
+          <Mob handleChange={this.handleChange} charLvl={this.state.charLvl} enemyLvl={this.state.enemyLvl} />
+          <Talents char={this.state.char} attribute={this.state.attr} level={this.state.level} DMGReduction={this.state.DMGReduction}/>
           <IonItem>
             <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>
           </IonItem>

@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonChip, IonText, IonToggle, } from "@ionic/react";
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonText, IonToggle, } from "@ionic/react";
 import { useEffect, useState } from "react";
 
 
@@ -8,9 +8,10 @@ interface ContainerProps {
     char: any;
     attribute: any;
     level: string;
+    DMGReduction:number;
 }
 
-const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
+const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReduction }) => {
     function getParamName(label: string, occurence: number) {
         let index = 0;
         while (occurence > 0) {
@@ -63,7 +64,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                 number[i] = number[i].map((x: number) => Math.round(x))
             }
             else if (result[i].includes(":F1")) {
-                number[i] = number[i].map((x: number) => (Math.round(x*10)/10).toFixed(1) )
+                number[i] = number[i].map((x: number) => (Math.round(x * 10) / 10).toFixed(1))
             }
             format = format.replace(result[i], number[i][Number(level) - 1])
         }
@@ -75,28 +76,28 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => label.includes(substring))) {
             if (format.includes("Max HP")) {
                 var name = format.split("Max HP")
-                return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * ( attribute.lifeStatic + attribute.lifePercentage + attribute.lifeBasic )).toFixed(0).toString()))
+                return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * (attribute.lifeStatic + attribute.lifePercentage + attribute.lifeBasic)).toFixed(0).toString()))
             }
             else if (format.includes("DEF")) {
                 var name = format.split("DEF")
-                return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * ( attribute.defendStatic + attribute.defendPercentage + attribute.defendBasic ) ).toFixed(0).toString()))
+                return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * (attribute.defendStatic + attribute.defendPercentage + attribute.defendBasic)).toFixed(0).toString()))
             }
-            else if (format.includes("%")){
-                let values = format.match(/[0-9]*\.?[0-9]+%/g);               
+            else if (format.includes("%")) {
+                let values = format.match(/[0-9]*\.?[0-9]+%/g);
                 let tempString: any;
                 for (var i in values) {
                     if (values[Number(i)].includes('%')) {
                         if (Number(i) === 0) {
-                            tempString = format.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * (( attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic )) ).toFixed(0).toString())
+                            tempString = format.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * ((attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic))).toFixed(0).toString())
                         }
                         else {
-                            tempString = tempString.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * (attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic) ).toFixed(0).toString())
+                            tempString = tempString.replace(values[Number(i)], (Number(values[Number(i)].replace('%', "")) / 100 * (attribute.attackStatic + attribute.attackPercentage + attribute.attackBasic)).toFixed(0).toString())
                         }
                     }
                 }
                 if (tempString.includes('×')) {
                     let values = tempString.match(/[0-9]*\.?[0-9]/g)
-                    return (Number(values[0])*Number(values[1])).toString()
+                    return (Number(values[0]) * Number(values[1])).toString()
                 }
                 return (tempString)
             }
@@ -107,10 +108,10 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
         return format
     }
 
-    function Calculate (values:any, number:any , bonus:any){
+    function Calculate(values: any, number: any, bonus: any) {
         let newValues = [];
         for (var i in values) {
-            newValues.push( (Number(values[i]) + Number(values[i]) * attribute[bonus]).toFixed(0) )
+            newValues.push( ((Number(values[i]) + Number(values[i]) * attribute[bonus]) * DMGReduction ).toFixed(0) )
         }
         for (var i in newValues) {
             number = number.replace(values[i], newValues[i])
@@ -123,7 +124,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             case ('b'):
                 {
                     //apply a = normal atk, b = charged atk, air = plunge
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
                         if (name.includes("Plunge")) {
                             let values = number.match(/[0-9]*\.?[0-9]/g);
                             number = Calculate(values, number, 'aBonus')
@@ -145,7 +146,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             case ('e'):
                 {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'eBonus')
@@ -155,7 +156,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                             number = Calculate(values, number, 'cureEffect')
                             return number
                         }
-                        else if (["Additional Shield"].some(substring => name.includes(substring))){
+                        else if (["Additional Shield"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'shield')
                             return number
                         }
@@ -166,7 +167,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
             case ('q'):
                 {
                     //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'qBonus')
@@ -184,11 +185,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
 
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec","Shield","Life Drain"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec", "Shield", "Life Drain"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
-                newValues.push(crit ? (Number(values[i]) * (attribute.criticalDamage+1)).toFixed(0) : values[i])
+                newValues.push(crit ? (Number(values[i]) * (attribute.criticalDamage + 1)).toFixed(0) : values[i])
             }
             for (var i in newValues) {
                 number = number.replace(values[i], newValues[i])
@@ -229,11 +230,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                 Bonus = attribute.physicalBonus
             }
         }
-        if (!["CD", "Energy", "Duration", "Stamina","Bonus", "Regeneration Per Sec", "Healing","Shield","Life Drain"].some(substring => name.includes(substring))) {
+        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec", "Healing", "Shield", "Life Drain"].some(substring => name.includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
-                newValues.push(ele ? (Number(values[i]) * (Bonus+1)).toFixed(0) : values[i])
+                newValues.push(ele ? (Number(values[i]) * (Bonus + 1)).toFixed(0) : values[i])
             }
             for (var i in newValues) {
                 number = number.replace(values[i], newValues[i])
@@ -288,8 +289,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
     return (
         <div>
             <IonCard>
+                <IonCardHeader>
+                    <IonCardTitle>Damage output</IonCardTitle>
+                    <IonCardSubtitle><IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions/special weapon passives or skill perks.</IonText></IonCardSubtitle>
+                </IonCardHeader>
                 <IonCardContent>
-                <IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions/special weapon passives or skill perks. <br/></IonText>
                     <div>Attack</div>
                     {
                         combat1 && combat1.map(x => {
@@ -313,7 +317,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     {
                         combat2 && combat2.map(x => {
                             return (
-                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name,ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), eCrit),eEle) } </p>
+                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name, ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), eCrit), eEle)} </p>
                             )
                         })
                     }
@@ -331,7 +335,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level }) => {
                     {
                         combat3 && combat3.map(x => {
                             return (
-                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name,ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), qCrit), qEle)} </p>
+                                <p key={x.name}>{x.name}: {x.dmg?.includes('undefined') || x.dmg === undefined ? "" : ApplyEleBonus(x.name, ApplyCrit(x.name, ApplyDMGBonus('e', x.name, x.dmg), qCrit), qEle)} </p>
                             )
                         })
                     }

@@ -1,13 +1,13 @@
 import { IonAvatar, IonItem, IonRow, IonSegment, IonSegmentButton } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
 import { MDBCol } from "mdbreact";
-import anemo from '../assets/anemo.jpg'
-import geo from '../assets/geo.jpg'
-import cryo from '../assets/cryo.jpg'
-import pyro from '../assets/pyro.jpg'
-import hydro from '../assets/hydro.jpg'
-import electro from '../assets/electro.jpg'
-import dendro from '../assets/dendro.jpg'
+import anemo from '../../assets/anemo.jpg'
+import geo from '../../assets/geo.jpg'
+import cryo from '../../assets/cryo.jpg'
+import pyro from '../../assets/pyro.jpg'
+import hydro from '../../assets/hydro.jpg'
+import electro from '../../assets/electro.jpg'
+import dendro from '../../assets/dendro.jpg'
 
 const genshindb = require('genshin-db');
 
