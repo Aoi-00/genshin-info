@@ -66,7 +66,7 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
                                 </IonItem>
 
                                 <IonCardContent>
-                                    <pre style={{ fontFamily: 'Roboto', fontSize: "1em" }}><IonText id={talents[x].name} color="medium">{talents[x].info} </IonText></pre>
+                                    <pre style={{ fontFamily: 'Roboto', fontSize: "1em",fontWeight:"bold" }}><IonText id={talents[x].name} color="medium">{talents[x].info} </IonText></pre>
                                 </IonCardContent>
                             </IonCard>
                         )
