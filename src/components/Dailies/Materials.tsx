@@ -86,17 +86,17 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
                             weaponMat && weaponMat.map((each: any) => {
                                 return (
                                     <IonCol key={each.name} size="6" >
-                                        <IonChip >
+                                        <IonChip style={{width:'45vw',height:'auto'}}>
                                             {
                                                 each.others.map((one: any) => {
                                                     return (
-                                                        <IonAvatar style={{ margin: '0', width: '1.2em', height: '1.2em' }}>
+                                                        <IonAvatar style={{ margin: '0' }}>
                                                             <IonImg src={one} />
                                                         </IonAvatar>
                                                     )
                                                 })
                                             }
-                                            <IonLabel>{each.name}</IonLabel>
+                                            <IonLabel style={{marginLeft:'0.5em'}}>{each.name}</IonLabel>
                                         </IonChip>
                                     </IonCol>
                                 )
