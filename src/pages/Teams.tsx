@@ -17,7 +17,7 @@ export default class Teams extends Component<userProps> {
     componentDidMount() {
         let team1: any[] = [], team2: any[] = [], team3: any[] = [], team4: any[] = [];
         for (var key in localStorage) {
-            if (key.includes('/teams/')) {
+            if (key.includes('/teams/') && !key.includes('/dmg')) {
                 var retrievedObject = localStorage.getItem(`${key}`);
                 if (retrievedObject !== null) {
                     switch (key.charAt(7)) {

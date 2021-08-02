@@ -6,7 +6,6 @@ import { MDBCol } from 'mdbreact';
 
 
 interface ContainerProps {
-    //handleChange: Function;
     team: string;
     navigate: Function;
     chars:any;
@@ -14,10 +13,7 @@ interface ContainerProps {
 }
 
 
-const Party: React.FC<ContainerProps> = ({ /*handleChange*/ team, navigate, chars, onClear }) => {
-    // useEffect(()=> {
-
-    // },[chars])
+const Party: React.FC<ContainerProps> = ({ team, navigate, chars, onClear }) => {
 
     return (
         <IonCard>

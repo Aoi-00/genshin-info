@@ -43,6 +43,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             var label = Object.keys(val)[0].split("|");
             var formattedResult = FormatNumber(label[1], Object.values(val)[0],skillNum)
             var Dmg = ApplyAttribute(label[0], formattedResult, Object.values(val)[0])
+            if (label[0].includes("Interval")) console.log(Dmg)
             var Json = { name: label[0], dmg: Dmg }
             result.push(Json)
         }
@@ -75,7 +76,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     }
 
     function ApplyAttribute(label: string, format: string, number: any) {
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus"].some(substring => label.includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "chance","stacks","additional elemental dmg","interval"].some(substring => label.toLowerCase().includes(substring))) {
             if (format.includes("Max HP")) {
                 var name = format.split("Max HP")
                 return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * (attribute.lifeStatic + attribute.lifePercentage + attribute.lifeBasic)).toFixed(0).toString()))
@@ -97,11 +98,12 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                         }
                     }
                 }
-                if (tempString.includes('×')) {
+                if (tempString.includes('×') || tempString.includes('*')) {
                     let values = tempString.match(/[0-9]*\.?[0-9]/g)
                     return (Number(values[0]) * Number(values[1])).toString()
                 }
                 return (tempString)
+                
             }
             else {
                 return format
@@ -126,7 +128,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('b'):
                 {
                     //apply a = normal atk, b = charged atk, air = plunge
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
                         if (name.includes("Plunge")) {
                             let values = number.match(/[0-9]*\.?[0-9]/g);
                             number = Calculate(values, number, 'aBonus')
@@ -148,7 +150,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('e'):
                 {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'eBonus')
@@ -158,7 +160,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                             number = Calculate(values, number, 'cureEffect')
                             return number
                         }
-                        else if (["Additional Shield"].some(substring => name.includes(substring))) {
+                        else if (["Shield"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'shield')
                             return number
                         }
@@ -169,7 +171,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('q'):
                 {
                     //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'qBonus')
@@ -187,7 +189,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
 
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec", "Shield", "Life Drain"].some(substring => name.includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "shield", "life drain","healing","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -232,7 +234,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                 Bonus = attribute.physicalBonus
             }
         }
-        if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Regeneration Per Sec", "Healing", "Shield", "Life Drain"].some(substring => name.includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "healing", "shield", "life drain","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {

@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
 import { Component } from 'react';
 import Mob from '../components/Mob';
 import TalentDetails from '../components/TalentDetails';
@@ -44,7 +44,7 @@ class Tab3 extends Component<userProps> {
   componentDidUpdate(prevProps: any, prevState: any, prevSnapShot: any) {
     if (this.state.enemyLvl !== prevState.enemyLvl || this.state.charLvl !== prevState.charLvl) {
       if (this.state.enemyLvl.length !== 0) {
-        var DMGReduction = (Number(this.state.charLvl) + 100) / (Number(this.state.charLvl) + Math.max(1, Number(this.state.enemyLvl)) + 200);
+        var DMGReduction = (Number(this.state.charLvl.replace("+","")) + 100) / (Number(this.state.charLvl.replace("+","")) + Math.max(1, Number(this.state.enemyLvl)) + 200);
         this.setState({ DMGReduction: DMGReduction })
       }
     }

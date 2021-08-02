@@ -1,4 +1,4 @@
-import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSelectOption, IonCardHeader, IonCardSubtitle, IonCardTitle, IonInput, IonCol, IonRow, IonItemDivider, IonItemGroup, IonItemOption, IonItemOptions, IonItemSliding, IonImg, IonText, } from '@ionic/react'
+import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonItemDivider, IonItemGroup, IonImg, IonText, } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
 
 const genshindb = require('genshin-db');
@@ -14,11 +14,6 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
         Object.keys(talent).map((each) => {
             talent[each].pic = images[each]
             talent[each].info = FormatText(talent[each].info)
-            // let talentInfo = document.getElementById(talent[each].name)
-            // if (talentInfo !== null) {
-            //     talentInfo.innerHTML = talent[each].info;
-            //     talentInfo.innerHTML = talentInfo?.textContent ? talentInfo?.textContent : ""
-            // }
         })
         return talent
     }
@@ -28,7 +23,6 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
         if (result !== null) {
             let replace: any[] = [];
             for (var i in result) {
-                //replace[i] = `<strong>${result[i].replaceAll("**", "")}</strong>`
                 replace[i] = `${result[i].replaceAll("**", "")}`
             }
             for (var i in replace) {

@@ -129,7 +129,8 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                 <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
                                 <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                 <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption></div>
+                                <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
+                                <IonSelectOption value={'cureEffect'}> Healing%</IonSelectOption></div>
                                 : <div>
                                     <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
                                     <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>

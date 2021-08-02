@@ -183,10 +183,6 @@ export default class Tab2 extends Component<userProps> {
             name = "scarificialfragments";
             break;
           }
-          case ("Emerald Orb"): {
-            name = "emeraldord";
-            break;
-          }
           case ("Favonius Codex"): {
             name = "favoniuscodes";
             break;
@@ -206,7 +202,7 @@ export default class Tab2 extends Component<userProps> {
         })
       }
       catch (err) {
-        alert("Weapon details not out yet, please choose another.")
+        alert("Unable to build weapon, please choose another.")
       }
     }
 
@@ -296,6 +292,10 @@ export default class Tab2 extends Component<userProps> {
             name = "wandererTroupe";
             break;
           }
+          case "Thundersoother": {
+            name = "thunderSmoother";
+            break;
+          }
           default: {
             name = this.camelize(set.name.replace("'s", ""));
             break;
@@ -305,7 +305,7 @@ export default class Tab2 extends Component<userProps> {
         let arti = new genshin.ArtifactBuilder()
           .setName(name)
           .position(position)
-          .mainTag(mainStat.statType, isNaN(["Bonus", "critical", "Percentage", "recharge"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue)) ? 0 : ["Bonus", "critical", "Percentage", "recharge"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
+          .mainTag(mainStat.statType, isNaN(["Bonus", "critical", "Percentage", "recharge","cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue)) ? 0 : ["Bonus", "critical", "Percentage", "recharge","cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
           .tag(stat1.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue))
           .tag(stat2.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue))
           .tag(stat3.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue))
@@ -357,8 +357,8 @@ export default class Tab2 extends Component<userProps> {
           <div>
             <Artifacts handleChange={this.updateArtiData} position={"flower"} data={this.state.flowerData}/>
             <Artifacts handleChange={this.updateArtiData} position={"feather"} data={this.state.featherData} />
-            <Artifacts handleChange={this.updateArtiData} position={"cup"}  data={this.state.cupData}/>
             <Artifacts handleChange={this.updateArtiData} position={"sand"} data={this.state.sandData} />
+            <Artifacts handleChange={this.updateArtiData} position={"cup"}  data={this.state.cupData}/>
             <Artifacts handleChange={this.updateArtiData} position={"head"}  data={this.state.headData}/>
           </div>
 
