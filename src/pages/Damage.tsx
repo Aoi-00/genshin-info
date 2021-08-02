@@ -1,6 +1,7 @@
 import { IonContent, IonHeader, IonItem, IonInput, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
 import { Component } from 'react';
 import Mob from '../components/Mob';
+import TalentDetails from '../components/TalentDetails';
 
 import Talents from '../components/Talents';
 import './Damage.css';
@@ -90,6 +91,7 @@ class Tab3 extends Component<userProps> {
           </IonHeader>
           <Mob handleChange={this.handleChange} charLvl={this.state.charLvl} enemyLvl={this.state.enemyLvl} />
           <Talents handleChange={this.handleTalent} char={this.state.char} attribute={this.state.attr} level={this.state.talent} DMGReduction={this.state.DMGReduction} />
+          <TalentDetails char={this.state.char}/>
         </IonContent>
       </IonPage>
     );

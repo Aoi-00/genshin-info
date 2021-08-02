@@ -1,6 +1,5 @@
 import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSelectOption, IonCardHeader, IonCardSubtitle, IonCardTitle, IonInput, IonCol, IonRow, } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
-//import { customActionSheetOptions } from '../customActionSheetOptions';
 
 
 interface ContainerProps {
