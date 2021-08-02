@@ -1,8 +1,8 @@
 import {  IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Dailies.css';
 import React, { Component } from 'react';
-import Materials from '../components/Materials';
-import Dates from '../components/Dates';
+import Materials from '../components/Dailies/Materials';
+import Dates from '../components/Dailies/Dates';
 
 
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -26,7 +26,6 @@ export default class Tab1 extends Component {
     this.setState({
       [e.target.id]: e.detail.value
     })
-    //console.log(`${e.detail.value} segment selected`)
   }
 
   render() {
@@ -41,7 +40,7 @@ export default class Tab1 extends Component {
         <IonContent fullscreen>
           <IonHeader collapse="condense">
             <IonToolbar>
-              <IonTitle size="large">Tab 1</IonTitle>
+              <IonTitle size="large">Daily Mats</IonTitle>
             </IonToolbar>
           </IonHeader>
 

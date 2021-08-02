@@ -58,11 +58,11 @@ const App: React.FC = () => (
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom">
-          <IonTabButton tab="tab1" href="/tab1">
+          <IonTabButton tab="dailies" href="/dailies">
             <IonIcon icon={calendar} />
             <IonLabel>Dailies</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/teams">
+          <IonTabButton tab="team" href="/teams">
             <IonIcon icon={people}> </IonIcon>
             <IonLabel>Teams</IonLabel>
           </IonTabButton>

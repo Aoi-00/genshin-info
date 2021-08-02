@@ -1,5 +1,6 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonText, IonToggle, } from "@ionic/react";
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonLabel, IonSelect, IonSelectOption, IonText, IonToggle, } from "@ionic/react";
 import { useEffect, useState } from "react";
+import { customActionSheetOptions } from "./customActionSheetOptions";
 
 
 const genshindb = require('genshin-db');
@@ -7,11 +8,12 @@ const genshindb = require('genshin-db');
 interface ContainerProps {
     char: any;
     attribute: any;
-    level: string;
-    DMGReduction:number;
+    level: any;
+    DMGReduction: number;
+    handleChange:Function;
 }
 
-const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReduction }) => {
+const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReduction, handleChange }) => {
     function getParamName(label: string, occurence: number) {
         let index = 0;
         while (occurence > 0) {
@@ -34,12 +36,12 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
         while (getParamName(testString, i) !== undefined);
         return result;
     }
-    function FilterText(arr: any) {
+    function FilterText(arr: any, skillNum: number) {
         let result: { name: string; dmg: any; }[] = [];
         for (var i in arr) {
             var val = arr[i];
             var label = Object.keys(val)[0].split("|");
-            var formattedResult = FormatNumber(label[1], Object.values(val)[0])
+            var formattedResult = FormatNumber(label[1], Object.values(val)[0],skillNum)
             var Dmg = ApplyAttribute(label[0], formattedResult, Object.values(val)[0])
             var Json = { name: label[0], dmg: Dmg }
             result.push(Json)
@@ -48,7 +50,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     }
 
 
-    function FormatNumber(format: string, number: any) {
+    function FormatNumber(format: string, number: any, skillNum: number) {
         var result: any = format.match(/{.+?}/g)
         for (var i in result) {
             if (result[i].includes(":P")) {
@@ -66,7 +68,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             else if (result[i].includes(":F1")) {
                 number[i] = number[i].map((x: number) => (Math.round(x * 10) / 10).toFixed(1))
             }
-            format = format.replace(result[i], number[i][Number(level) - 1])
+            format = format.replace(result[i], number[i][Number(level[skillNum-1]) - 1])
         }
         return format
 
@@ -111,7 +113,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     function Calculate(values: any, number: any, bonus: any) {
         let newValues = [];
         for (var i in values) {
-            newValues.push( ((Number(values[i]) + Number(values[i]) * attribute[bonus]) * DMGReduction ).toFixed(0) )
+            newValues.push(((Number(values[i]) + Number(values[i]) * attribute[bonus]) * DMGReduction).toFixed(0))
         }
         for (var i in newValues) {
             number = number.replace(values[i], newValues[i])
@@ -124,7 +126,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('b'):
                 {
                     //apply a = normal atk, b = charged atk, air = plunge
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
                         if (name.includes("Plunge")) {
                             let values = number.match(/[0-9]*\.?[0-9]/g);
                             number = Calculate(values, number, 'aBonus')
@@ -146,7 +148,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('e'):
                 {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'eBonus')
@@ -167,7 +169,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('q'):
                 {
                     //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus","Life Drain"].some(substring => name.includes(substring))) {
+                    if (!["CD", "Energy", "Duration", "Stamina", "Bonus", "Life Drain"].some(substring => name.includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'qBonus')
@@ -244,7 +246,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
         return number;
     }
 
-
     const [combat1, setCombat1] = useState(Array());
     const [combat2, setCombat2] = useState(Array());
     const [combat3, setCombat3] = useState(Array());
@@ -254,14 +255,6 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     const [eEle, seteEle] = useState(false);
     const [qCrit, setqCrit] = useState(false);
     const [qEle, setqEle] = useState(false);
-    const [talentLvl, setTalentLvl] = useState('1');
-
-    useEffect(() => {
-        if (talentLvl !== level) {
-            setTalentLvl(level)
-        }
-    }, [level])
-
     useEffect(() => {
         if (Object.keys(char).length !== 0 && Object.keys(attribute).length !== 0) {
             let talentDetails: { [key: string]: any } = genshindb.talents(char.name)
@@ -278,11 +271,11 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                 }
                 allTalents[stat] = talentMultiplier
             }
-            setCombat1(FilterText(allTalents.combat1))
-            setCombat2(FilterText(allTalents.combat2))
-            setCombat3(FilterText(allTalents.combat3))
+            setCombat1(FilterText(allTalents.combat1,1))
+            setCombat2(FilterText(allTalents.combat2,2))
+            setCombat3(FilterText(allTalents.combat3,3))
         }
-    }, [char, level])
+    }, [char, level[0],level[1],level[2]])
 
 
 
@@ -294,7 +287,21 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                     <IonCardSubtitle><IonText color="danger">Note: The calculation assumes that artifact effect is always active (if applicable) and at maximum level. It also does not take into account elemental reactions/special weapon passives or skill perks.</IonText></IonCardSubtitle>
                 </IonCardHeader>
                 <IonCardContent>
-                    <div>Attack</div>
+                    <div className="block" > <h2>Attack</h2></div>
+                    <div className="block">
+                        <IonLabel>Level: </IonLabel>
+                        <IonSelect
+                            id="talent" value={level[0]}
+                            interfaceOptions={customActionSheetOptions}
+                            interface="action-sheet"
+                            placeholder="Select One"
+                            onIonChange={(e) => handleChange(e,0)}
+                        >
+                            {Array.from({ length: 15 }, (_, i) => i + 1).map((x) => {
+                                return (<IonSelectOption key={x} value={x}> {x} </IonSelectOption>)
+                            })}
+                        </IonSelect>
+                    </div>
                     {
                         combat1 && combat1.map(x => {
                             return (
@@ -313,7 +320,21 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                     </IonChip>
 
                     <br />
-                    Elemental Skill
+                    <div className="block"> <h2>Elemental Skill</h2></div>
+                    <div className="block">
+                        <IonLabel>Level: </IonLabel>
+                        <IonSelect
+                            id="talent" value={level[1]}
+                            interfaceOptions={customActionSheetOptions}
+                            interface="action-sheet"
+                            placeholder="Select One"
+                            onIonChange={(e) => handleChange(e,1)}
+                        >
+                            {Array.from({ length: 15 }, (_, i) => i + 1).map((x) => {
+                                return (<IonSelectOption key={x} value={x}> {x} </IonSelectOption>)
+                            })}
+                        </IonSelect>
+                    </div>
                     {
                         combat2 && combat2.map(x => {
                             return (
@@ -331,7 +352,21 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                         <IonToggle color="primary" checked={eEle} onIonChange={(e) => seteEle(!eEle)} />
                     </IonChip>
                     <br />
-                    Elemental Burst
+                    <div className="block"> <h2>Elemental Burst</h2></div>
+                    <div className="block">
+                        <IonLabel>Level: </IonLabel>
+                        <IonSelect
+                            id="talent" value={level[2]}
+                            interfaceOptions={customActionSheetOptions}
+                            interface="action-sheet"
+                            placeholder="Select One"
+                            onIonChange={(e) => handleChange(e,2)}
+                        >
+                            {Array.from({ length: 15 }, (_, i) => i + 1).map((x) => {
+                                return (<IonSelectOption key={x} value={x}> {x} </IonSelectOption>)
+                            })}
+                        </IonSelect>
+                    </div>
                     {
                         combat3 && combat3.map(x => {
                             return (

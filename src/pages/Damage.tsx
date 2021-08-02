@@ -14,12 +14,12 @@ interface userProps {
 
 class Tab3 extends Component<userProps> {
   state = {
-    level: "1",
     attr: {},
     char: {},
     charLvl: "1",
     enemyLvl: "1",
-    DMGReduction:1
+    DMGReduction: 1,
+    talent: [1, 1, 1]
   }
 
   componentDidMount() {
@@ -31,24 +31,31 @@ class Tab3 extends Component<userProps> {
         charLvl: JSON.parse(retrievedObject).charLvl,
       })
     }
-    var enemyLvl = localStorage.getItem("enemyLvl")
-    if (enemyLvl !== null) {
-      this.setState({enemyLvl: enemyLvl})
+    var data = localStorage.getItem(this.props.location.pathname)
+    if (data !== null) {
+      this.setState({
+        enemyLvl: JSON.parse(data).enemyLvl,
+        talent: JSON.parse(data).talent
+      })
     }
   }
 
   componentDidUpdate(prevProps: any, prevState: any, prevSnapShot: any) {
     if (this.state.enemyLvl !== prevState.enemyLvl || this.state.charLvl !== prevState.charLvl) {
       if (this.state.enemyLvl.length !== 0) {
-        var DMGReduction = (Number(this.state.charLvl) + 100) / (Number(this.state.charLvl) + Math.max(1,Number(this.state.enemyLvl)) + 200);
-        this.setState({DMGReduction: DMGReduction})
+        var DMGReduction = (Number(this.state.charLvl) + 100) / (Number(this.state.charLvl) + Math.max(1, Number(this.state.enemyLvl)) + 200);
+        this.setState({ DMGReduction: DMGReduction })
       }
     }
   }
 
-  componentWillUnmount(){
-    if (this.state.enemyLvl.length !== 0){
-      localStorage.setItem('enemyLvl',this.state.enemyLvl)
+  componentWillUnmount() {
+    if (this.state.enemyLvl.length !== 0) {
+      let data = {
+        enemyLvl: this.state.enemyLvl,
+        talent: this.state.talent
+      }
+      localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
     }
   }
 
@@ -56,6 +63,12 @@ class Tab3 extends Component<userProps> {
     this.setState({
       [e.target.id]: e.target.value
     })
+  }
+
+  handleTalent = (e: any, skill: number) => {
+    let talent = this.state.talent;
+    talent[skill] = e.target.value;
+    this.setState({ talent: talent })
   }
 
   render() {
@@ -76,10 +89,7 @@ class Tab3 extends Component<userProps> {
             </IonToolbar>
           </IonHeader>
           <Mob handleChange={this.handleChange} charLvl={this.state.charLvl} enemyLvl={this.state.enemyLvl} />
-          <Talents char={this.state.char} attribute={this.state.attr} level={this.state.level} DMGReduction={this.state.DMGReduction}/>
-          <IonItem>
-            <IonInput id="level" value={this.state.level} placeholder="Enter Input" onIonChange={this.handleChange} clearInput></IonInput>
-          </IonItem>
+          <Talents handleChange={this.handleTalent} char={this.state.char} attribute={this.state.attr} level={this.state.talent} DMGReduction={this.state.DMGReduction} />
         </IonContent>
       </IonPage>
     );
