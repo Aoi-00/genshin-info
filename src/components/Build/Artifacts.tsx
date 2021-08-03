@@ -4,7 +4,9 @@ import defaultimage from '../../assets/default.jpeg';
 import React, { useEffect, useState } from 'react';
 import './Artifacts.css';
 import {customActionSheetOptions} from '../customActionSheetOptions';
-
+import artifactSubstats from '../../data/substats.json';
+import gobletStats from '../../data/gobletstats.json'
+import mainstats from '../../data/mainstats.json';
 
 interface ContainerProps {
     handleChange: Function;
@@ -12,14 +14,15 @@ interface ContainerProps {
     data:any;
 }
 
-
 type Stat = {
     statType: string,
     statValue: string
 }
 
-
 const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) => {
+    let subStats = artifactSubstats.map((x: any) => <IonSelectOption key={x.val} value={x.val}> {x.subStats} </IonSelectOption>)
+    let gobletMainstats = gobletStats.map((x: any) => <IonSelectOption key={x.val} value={x.val}> {x.subStats} </IonSelectOption>)
+    let mainStats = mainstats.map((x: any) => <IonSelectOption key={x.val} value={x.val}> {x.subStats} </IonSelectOption>)
     const genshindb = require('genshin-db');
     const [artiList, setartiList] = useState(genshindb.artifacts('name', { matchCategories: true }));
     const [mainStat, setMainStat] = useState({} as Stat);
@@ -121,28 +124,9 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                             placeholder="Main Stat"
                             onIonChange={(e) => setMainStat({ ...mainStat, statType: (e.target as unknown as HTMLInputElement).value })}
                         >
-                            {(slot !== "goblet") ? <div><IonSelectOption value={'critical'}> Crit </IonSelectOption>
-                                <IonSelectOption value={'criticalDamage'}> Crit DMG </IonSelectOption>
-                                <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
-                                <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
-                                <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
-                                <IonSelectOption value={'cureEffect'}> Healing%</IonSelectOption></div>
+                            {(slot !== "goblet") ? <div>{mainStats}</div>
                                 : <div>
-                                    <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                    <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                    <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
-                                    <IonSelectOption value={'waterBonus'}> Hydro Bonus </IonSelectOption>
-                                    <IonSelectOption value={'fireBonus'}> Pyro Bonus </IonSelectOption>
-                                    <IonSelectOption value={'iceBonus'}> Cryo Bonus </IonSelectOption>
-                                    <IonSelectOption value={'windBonus'}> Anemo Bonus </IonSelectOption>
-                                    <IonSelectOption value={'rockBonus'}> Geo Bonus </IonSelectOption>
-                                    <IonSelectOption value={'thunderBonus'}> Electro Bonus </IonSelectOption>
-                                    <IonSelectOption value={'physicalBonus'}> Phys Bonus </IonSelectOption>
+                                    {gobletMainstats}
                                 </div>
                             }
 
@@ -164,16 +148,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                     placeholder="Stat 1"
                                     onIonChange={(e) => setStat1({ ...stat1, statType: (e.target as unknown as HTMLInputElement).value })}
                                 >
-                                    <IonSelectOption value={'critical'}> Crit </IonSelectOption>
-                                    <IonSelectOption value={'criticalDamage'}> Crit DMG </IonSelectOption>
-                                    <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
-                                    <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                    <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
-                                    <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
-                                    <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                    <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                    <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
+                                   {subStats}
                                 </IonSelect>
                                 <IonInput type="number" value={stat1?.statValue} placeholder="Enter" onIonChange={e => setStat1({
                                     ...stat1, statValue: (e.target as unknown as HTMLInputElement).value
@@ -191,16 +166,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                     placeholder="Stat 2"
                                     onIonChange={(e) => setStat2({ ...stat2, statType: (e.target as unknown as HTMLInputElement).value })}
                                 >
-                                    <IonSelectOption value={'critical'}> Crit </IonSelectOption>
-                                    <IonSelectOption value={'criticalDamage'}> Crit DMG </IonSelectOption>
-                                    <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
-                                    <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                    <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
-                                    <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
-                                    <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                    <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                    <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
+                                    {subStats}
                                 </IonSelect>
                                 <IonInput type="number" value={stat2?.statValue} placeholder="Enter" onIonChange={e => setStat2({
                                     ...stat2, statValue: (e.target as unknown as HTMLInputElement).value
@@ -217,16 +183,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                     placeholder="Stat 3"
                                     onIonChange={(e) => setStat3({ ...stat3, statType: (e.target as unknown as HTMLInputElement).value })}
                                 >
-                                    <IonSelectOption value={'critical'}> Crit </IonSelectOption>
-                                    <IonSelectOption value={'criticalDamage'}> Crit DMG </IonSelectOption>
-                                    <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
-                                    <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                    <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
-                                    <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
-                                    <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                    <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                    <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
+                                    {subStats}
                                 </IonSelect>
                                 <IonInput type="number" value={stat3?.statValue} placeholder="Enter" onIonChange={e => setStat3({
                                     ...stat3, statValue: (e.target as unknown as HTMLInputElement).value
@@ -243,16 +200,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                     placeholder="Stat 4"
                                     onIonChange={(e) => setStat4({ ...stat4, statType: (e.target as unknown as HTMLInputElement).value })}
                                 >
-                                    <IonSelectOption value={'critical'}> Crit </IonSelectOption>
-                                    <IonSelectOption value={'criticalDamage'}> Crit DMG </IonSelectOption>
-                                    <IonSelectOption value={'attackStatic'}> ATK </IonSelectOption>
-                                    <IonSelectOption value={'attackPercentage'}> ATK% </IonSelectOption>
-                                    <IonSelectOption value={'defendStatic'}> DEF </IonSelectOption>
-                                    <IonSelectOption value={'defendPercentage'}> DEF% </IonSelectOption>
-                                    <IonSelectOption value={'recharge'}> Recharge </IonSelectOption>
-                                    <IonSelectOption value={'elementalMastery'}> EM </IonSelectOption>
-                                    <IonSelectOption value={'lifeStatic'}> HP </IonSelectOption>
-                                    <IonSelectOption value={'lifePercentage'}> HP% </IonSelectOption>
+                                    {subStats}
                                 </IonSelect>
                                 <IonInput type="number" value={stat4?.statValue} placeholder="Enter" onIonChange={e => setStat4({
                                     ...stat4, statValue: (e.target as unknown as HTMLInputElement).value
@@ -262,7 +210,6 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                     </IonRow>
                 </IonCardContent>
             </IonCard>
-
         </div >
     )
 }

@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, IonButtons, IonAvatar, IonImg } from '@ionic/react';
 import { Component } from 'react';
 import Mob from '../components/Mob';
 import TalentDetails from '../components/TalentDetails';
@@ -44,7 +44,7 @@ class Tab3 extends Component<userProps> {
   componentDidUpdate(prevProps: any, prevState: any, prevSnapShot: any) {
     if (this.state.enemyLvl !== prevState.enemyLvl || this.state.charLvl !== prevState.charLvl) {
       if (this.state.enemyLvl.length !== 0) {
-        var DMGReduction = (Number(this.state.charLvl.replace("+","")) + 100) / (Number(this.state.charLvl.replace("+","")) + Math.max(1, Number(this.state.enemyLvl)) + 200);
+        var DMGReduction = (Number(this.state.charLvl.replace("+", "")) + 100) / (Number(this.state.charLvl.replace("+", "")) + Math.max(1, Number(this.state.enemyLvl)) + 200);
         this.setState({ DMGReduction: DMGReduction })
       }
     }
@@ -77,6 +77,9 @@ class Tab3 extends Component<userProps> {
       <IonPage>
         <IonHeader>
           <IonToolbar>
+            <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
+              <IonImg src={""} />
+            </IonAvatar>
             <IonTitle>Damage</IonTitle>
             <IonButtons slot="start">
               <IonBackButton defaultHref={this.props.location.pathname.slice(0, -4)} />
@@ -91,7 +94,7 @@ class Tab3 extends Component<userProps> {
           </IonHeader>
           <Mob handleChange={this.handleChange} charLvl={this.state.charLvl} enemyLvl={this.state.enemyLvl} />
           <Talents handleChange={this.handleTalent} char={this.state.char} attribute={this.state.attr} level={this.state.talent} DMGReduction={this.state.DMGReduction} />
-          <TalentDetails char={this.state.char}/>
+          <TalentDetails char={this.state.char} />
         </IonContent>
       </IonPage>
     );

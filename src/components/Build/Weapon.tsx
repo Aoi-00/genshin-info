@@ -2,8 +2,8 @@ import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonSelect, IonSe
 import defaultimage from '../../assets/default.jpeg';
 import React, { useEffect, useState } from 'react'
 import './Weapon.css';
-import {customActionSheetOptions} from '../customActionSheetOptions';
-
+import { customActionSheetOptions } from '../customActionSheetOptions';
+import threeStar from '../../data/3StarWep.json'
 
 interface ContainerProps {
     handleChange: Function;
@@ -69,7 +69,7 @@ const Weapon: React.FC<ContainerProps> = ({ handleChange, weapon, refine, weapLv
                     >
                         {
 
-                            wepList.map((eachWep) => {
+                            wepList.filter(x => threeStar.every(wep => wep.name !== x.name)).map((eachWep) => {
                                 return (
                                     <IonSelectOption key={eachWep.name} value={eachWep.name}> {eachWep.name} </IonSelectOption>
                                 )

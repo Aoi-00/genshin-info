@@ -1,0 +1,46 @@
+[
+    {
+        "subStats": "HP%",
+        "val": "lifePercentage"
+    },
+    {
+        "subStats": "DEF%",
+        "val": "defendPercentage"
+    },
+    {
+        "subStats": "ATK%",
+        "val": "attackPercentage"
+    },
+    {
+        "subStats": "EM",
+        "val": "elementalMastery"
+    },
+    {
+        "subStats": "Hydro Bonus",
+        "val": "waterBonus"
+    },
+    {
+        "subStats": "Pyro Bonus",
+        "val": "fireBonus"
+    },
+    {
+        "subStats": "Cryo Bonus",
+        "val": "iceBonus"
+    },
+    {
+        "subStats": "Anemo Bonus",
+        "val": "windBonus"
+    },
+    {
+        "subStats": "Geo Bonus",
+        "val": "rockBonus"
+    },
+    {
+        "subStats": "Electro Bonus",
+        "val": "thunderBonus"
+    },
+    {
+        "subStats": "Phys Bonus",
+        "val": "physicalBonus"
+    }
+]

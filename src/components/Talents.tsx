@@ -1,5 +1,6 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonChip, IonLabel, IonSelect, IonSelectOption, IonText, IonToggle, } from "@ionic/react";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { customActionSheetOptions } from "./customActionSheetOptions";
 
 
@@ -14,6 +15,7 @@ interface ContainerProps {
 }
 
 const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReduction, handleChange }) => {
+    const location = useLocation();
     function getParamName(label: string, occurence: number) {
         let index = 0;
         while (occurence > 0) {
@@ -259,7 +261,13 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     const [qEle, setqEle] = useState(false);
     useEffect(() => {
         if (Object.keys(char).length !== 0 && Object.keys(attribute).length !== 0) {
-            let talentDetails: { [key: string]: any } = genshindb.talents(char.name)
+            let charName;
+            if (char.name === "Aether"){
+                let retrievedEle = localStorage.getItem(location.pathname.replace("/dmg","/ele"));
+                if (retrievedEle) charName = "traveler"+JSON.parse(retrievedEle)
+            }
+            else {charName = char.name}
+            let talentDetails: { [key: string]: any } = genshindb.talents(charName)
             let allTalents: { [key: string]: any } = {};
             for (const stat of ["combat1", "combat2", "combat3"]) {
                 let talentMultiplier: any[] = []

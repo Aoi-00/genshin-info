@@ -1,5 +1,6 @@
 import { IonCard, IonItem, IonAvatar, IonLabel, IonCardContent, IonItemDivider, IonItemGroup, IonImg, IonText, } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router';
 
 const genshindb = require('genshin-db');
 interface ContainerProps {
@@ -9,7 +10,7 @@ interface ContainerProps {
 const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
     const [talents, setTalent] = useState<any>({});
     const [passives, setPassives] = useState<any>({});
-
+    const location = useLocation();
     function findImage(images: any, talent: any) {
         Object.keys(talent).map((each) => {
             talent[each].pic = images[each]
@@ -34,7 +35,13 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
 
     useEffect(() => {
         if (char.name !== undefined) {
-            let details: any = genshindb.talents(char.name);
+            let charName;
+            if (char.name === "Aether"){
+                let retrievedEle = localStorage.getItem(location.pathname.replace("/dmg","/ele"));
+                if (retrievedEle) charName = "traveler"+JSON.parse(retrievedEle)
+            }
+            else {charName = char.name}
+            let details: any = genshindb.talents(charName);
             let combat: any = {};
             Object.keys(details).filter((x) => x.includes("combat")).map((each) => {
                 combat[each] = details[each]
@@ -57,7 +64,7 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
                 {
                     talents && Object.keys(talents).map((x) => {
                         return (
-                            <IonCard>
+                            <IonCard key={talents[x].name}>
                                 <IonItem>
                                     <IonAvatar style={{ marginRight: "0.5em" }}>
                                         <IonImg src={talents[x].pic} alt={""} />
@@ -66,7 +73,7 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
                                 </IonItem>
 
                                 <IonCardContent>
-                                    <pre style={{ fontFamily: 'Roboto', fontSize: "1em",fontWeight:"bold" }}><IonText id={talents[x].name} color="medium">{talents[x].info} </IonText></pre>
+                                    <pre style={{ fontFamily: 'Roboto', fontSize: "1em"}}><IonText id={talents[x].name} color="medium">{talents[x].info} </IonText></pre>
                                 </IonCardContent>
                             </IonCard>
                         )
@@ -81,7 +88,7 @@ const TalentDetails: React.FC<ContainerProps> = ({ char }) => {
                 {
                     passives && Object.keys(passives).map((x) => {
                         return (
-                            <IonCard>
+                            <IonCard key={passives[x].name}>
                                 <IonItem>
                                     <IonAvatar style={{ marginRight: "0.5em" }}>
                                         <IonImg src={passives[x].pic} alt={""} />

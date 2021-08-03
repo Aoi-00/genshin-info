@@ -1,4 +1,4 @@
-import {  IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAvatar, IonContent, IonHeader, IonImg, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Dailies.css';
 import React, { Component } from 'react';
 import Materials from '../components/Dailies/Materials';
@@ -33,6 +33,9 @@ export default class Tab1 extends Component {
       <IonPage>
         <IonHeader>
           <IonToolbar>
+            <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
+              <IonImg src={""} />
+            </IonAvatar>
             <IonTitle>Daily Mats</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -45,8 +48,8 @@ export default class Tab1 extends Component {
           </IonHeader>
 
           <div className="dailyMats">
-              <Dates date={this.state.date} handleChange={this.onChange} />
-              <Materials date={this.state.date} today={this.state.today} />
+            <Dates date={this.state.date} handleChange={this.onChange} />
+            <Materials date={this.state.date} today={this.state.today} />
           </div>
 
         </IonContent>

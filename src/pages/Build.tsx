@@ -1,4 +1,4 @@
-import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAvatar, IonBackButton, IonButtons, IonContent, IonHeader, IonImg, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Build.css';
 import StatsCalc from '../components/Build/StatsCalc';
 
@@ -159,7 +159,10 @@ export default class Tab2 extends Component<userProps> {
       this.setState({
         wepList: wepList
       })
-        let char = new genshin.Character(charInfo.name.toLowerCase().replace(" ", ""), this.state.charLvl.replace("+",""), this.state.charLvl.includes("+"), this.state.charConst);
+      let name;
+      if (charInfo.name === "Aether") {name = "me_geo"}
+      else name = charInfo.name
+        let char = new genshin.Character(name.toLowerCase().replace(" ", ""), this.state.charLvl.replace("+",""), this.state.charLvl.includes("+"), this.state.charConst);
         this.setState({
           buildChar: char
         })
@@ -337,6 +340,9 @@ export default class Tab2 extends Component<userProps> {
             <IonButtons slot="start">
               <IonBackButton defaultHref="/teams" />
             </IonButtons>
+            <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
+              <IonImg src={""} />
+            </IonAvatar>
             <IonTitle>Damage Calculator</IonTitle>
           </IonToolbar>
         </IonHeader>

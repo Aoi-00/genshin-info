@@ -8,27 +8,50 @@ import pyro from '../../assets/pyro.jpg'
 import hydro from '../../assets/hydro.jpg'
 import electro from '../../assets/electro.jpg'
 import dendro from '../../assets/dendro.jpg'
+import { useLocation } from 'react-router';
 
 const genshindb = require('genshin-db');
 
-//console.log(elements);
 interface ContainerProps {
     handleChange: Function;
 }
 
 
 const Character: React.FC<ContainerProps> = ({ handleChange }) => {
-    const [ele, setEle] = useState('anemo');
+    const usePrevious = (value: any) => {
+        const ref = React.useRef();
+        useEffect(() => {
+            ref.current = value;
+        });
+        return ref.current;
+    }
+    const location = useLocation();
+    const [ele, setEle] = useState('');
     const [charList, setCharList] = useState(genshindb.characters(ele, { matchCategories: true }))
     useEffect(() => {
         if (ele === 'geo' || ele === 'anemo' || ele === 'electro') {
             let list = genshindb.characters(ele, { matchCategories: true });
+            list.push("Aether")
             setCharList(list)
             return charList;
         }
         setCharList(genshindb.characters(ele, { matchCategories: true }))
         return charList;
     }, [ele])
+
+    useEffect(() => {
+        const localRepoItems = localStorage.getItem(location.pathname + "/ele");
+        if (localRepoItems) {
+            setEle(JSON.parse(localRepoItems));
+        }
+    }, [])
+
+    const prevEle:any = usePrevious(ele);
+    useEffect(() => {
+        if (prevEle?.length !== ele.length) {
+            localStorage.setItem(location.pathname + "/ele", JSON.stringify(ele));
+        }
+    }, [ele]);
 
     return (
         <div>
