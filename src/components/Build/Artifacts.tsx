@@ -1,9 +1,9 @@
 
-import { IonCard, IonCardContent, IonItem, IonButton, IonAvatar, IonSelect, IonSelectOption, IonInput, IonRow, IonCol } from '@ionic/react'
+import { IonCard, IonCardContent, IonItem, IonButton, IonAvatar, IonSelect, IonSelectOption, IonInput, IonRow, IonCol, IonToast } from '@ionic/react'
 import defaultimage from '../../assets/default.jpeg';
 import React, { useEffect, useState } from 'react';
 import './Artifacts.css';
-import {customActionSheetOptions} from '../customActionSheetOptions';
+import { customActionSheetOptions } from '../customActionSheetOptions';
 import artifactSubstats from '../../data/substats.json';
 import gobletStats from '../../data/gobletstats.json'
 import mainstats from '../../data/mainstats.json';
@@ -11,7 +11,7 @@ import mainstats from '../../data/mainstats.json';
 interface ContainerProps {
     handleChange: Function;
     position: string;
-    data:any;
+    data: any;
 }
 
 type Stat = {
@@ -30,6 +30,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
     const [stat2, setStat2] = useState({} as Stat);
     const [stat3, setStat3] = useState({} as Stat);
     const [stat4, setStat4] = useState({} as Stat);
+    const [showToast1, setShowToast1] = useState(false);
     const [setName, setArtiSet] = useState('');
 
     let slot: string;
@@ -57,29 +58,31 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
     }
 
     useEffect(() => {
-        if (Object.keys(data).length !== 0){
+        if (Object.keys(data).length !== 0) {
             setArtiSet(data.set.name)
             setMainStat({
                 statType: data.mainStat.statType,
-                statValue:data.mainStat.statValue
+                statValue: data.mainStat.statValue
             })
             setStat1({
                 statType: data.stat1.statType,
-                statValue:data.stat1.statValue
+                statValue: data.stat1.statValue
             })
             setStat2({
                 statType: data.stat2.statType,
-                statValue:data.stat2.statValue
+                statValue: data.stat2.statValue
             })
             setStat3({
                 statType: data.stat3.statType,
-                statValue:data.stat3.statValue
+                statValue: data.stat3.statValue
             })
             setStat4({
                 statType: data.stat4.statType,
-                statValue:data.stat4.statValue
+                statValue: data.stat4.statValue
             })
+            setShowToast1(true);
         }
+
     }, [data])
 
     return (
@@ -148,7 +151,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                     placeholder="Stat 1"
                                     onIonChange={(e) => setStat1({ ...stat1, statType: (e.target as unknown as HTMLInputElement).value })}
                                 >
-                                   {subStats}
+                                    {subStats}
                                 </IonSelect>
                                 <IonInput type="number" value={stat1?.statValue} placeholder="Enter" onIonChange={e => setStat1({
                                     ...stat1, statValue: (e.target as unknown as HTMLInputElement).value
@@ -207,6 +210,12 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                                 })}></IonInput>
                             </IonItem>
                         </IonCol>
+                        <IonToast
+                            isOpen={showToast1}
+                            onDidDismiss={() => setShowToast1(false)}
+                            message= {`Your ${slot} stats have been saved.`}
+                            duration={200}
+                        />
                     </IonRow>
                 </IonCardContent>
             </IonCard>

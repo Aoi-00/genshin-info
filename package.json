@@ -21,7 +21,7 @@
     "@types/react-router": "^5.1.15",
     "@types/react-router-dom": "^5.1.7",
     "css-what": "^5.0.1",
-    "genshin-db": "^3.9.1",
+    "genshin-db": "^3.9.2",
     "genshin_panel": "^2.14.0",
     "ionicons": "^5.5.2",
     "mdbreact": "^5.1.0",
