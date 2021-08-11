@@ -12,17 +12,7 @@
 /build
 
 # Android Studio
-.idea/
-.gradle
-/*/local.properties
-/*/out
-/*/*/build
-/*/*/production
-*.iml
-*.iws
-*.ipr
-*~
-*.swp
+android
 
 # misc
 .DS_Store
