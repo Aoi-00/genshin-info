@@ -2,7 +2,7 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonBackButton, Io
 import { Component } from 'react';
 import Mob from '../components/Mob';
 import TalentDetails from '../components/TalentDetails';
-
+import paimon from '../assets/paimonTrans.jpeg';
 import Talents from '../components/Talents';
 import './Damage.css';
 
@@ -78,7 +78,7 @@ class Tab3 extends Component<userProps> {
         <IonHeader>
           <IonToolbar>
             <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
-              <IonImg src={""} />
+              <IonImg src={paimon} />
             </IonAvatar>
             <IonTitle>Damage</IonTitle>
             <IonButtons slot="start">

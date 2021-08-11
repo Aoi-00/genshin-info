@@ -11,43 +11,39 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
     const chosenDay = ((date) === "Today") ? today : date;
     const talentMatResults = genshindb.materials('Talent Level-Up Material', { matchCategories: true });
     const weaponMatResults = genshindb.materials('Weapon Ascension Material', { matchCategories: true, verboseCategories: true });
-    let allResults = genshindb.materials(chosenDay, { matchCategories: true });
-
-    let allMat: any[] = [];
+    let allResults: any[] = genshindb.materials(chosenDay, { matchCategories: true, verboseCategories: true });
     let talentMat: any[] = [];
     let weaponMat: any[] = [];
 
-    allResults && allResults.map((each: any[]) => {
-        return (
-            allMat.push(genshindb.materials(each, { matchCategories: true, verboseCategories: true }))
-        )
-    })
-    let oneLevel = allMat.filter((ele: any) => ele.rarity === '3')
-    talentMatResults && talentMatResults.map((each: any[]) => {
-        const test = oneLevel.filter(eachItem => eachItem.name.includes(each));
-        if (test.length !== 0) {
-            let results = allMat.filter((x: any) => x.dropdomain === test[0].dropdomain)
-            let images = [];
-            for (var one of results) { images.push(one.images.fandom); }
-            test[0].others = images;
-            return (
-                talentMat.push(test[0])
-            )
-        }
-    })
-    weaponMatResults && weaponMatResults.map((each: any) => {
-        const test = oneLevel.filter(eachItem => eachItem.name.includes(each.name));
-        if (test.length !== 0) {
-            let results = allMat.filter((x: any) => x.dropdomain === test[0].dropdomain)
-            let images = [];
-            for (var one of results) { images.push(one.images.fandom); }
-            test[0].others = images;
-            return (
-                weaponMat.push(each)
-            )
-        }
-    })
-    
+    if (allResults) {
+        let oneLevel = allResults.filter((ele: any) => ele.rarity === '3');
+        talentMatResults && talentMatResults.map((each: any[]) => {
+            const test = oneLevel.filter(eachItem => eachItem.name.includes(each));
+            if (test.length !== 0) {
+                let results = allResults.filter((x: any) => x.dropdomain === test[0].dropdomain)
+                let images = [];
+                for (var one of results) { images.push(one.images.fandom); }
+                test[0].others = images;
+                return (
+                    talentMat.push(test[0])
+                )
+            }
+        })
+        weaponMatResults && weaponMatResults.map((each: any) => {
+            const test = oneLevel.filter(eachItem => eachItem.name.includes(each.name));
+            if (test.length !== 0) {
+                let results = allResults.filter((x: any) => x.dropdomain === test[0].dropdomain)
+                let images = [];
+                for (var one of results) { images.push(one.images.fandom); }
+                test[0].others = images;
+                return (
+                    weaponMat.push(each)
+                )
+            }
+        })
+    }
+
+
     return (
         <IonGrid>
             {today !== "Sunday" &&
@@ -86,7 +82,7 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
                             weaponMat && weaponMat.map((each: any) => {
                                 return (
                                     <IonCol key={each.name} size="6" >
-                                        <IonChip style={{width:'45vw',height:'auto'}}>
+                                        <IonChip style={{ width: '45vw', height: 'auto' }}>
                                             {
                                                 each.others.map((one: any) => {
                                                     return (
@@ -96,7 +92,7 @@ const Materials: React.FC<ContainerProps> = ({ date, today }) => {
                                                     )
                                                 })
                                             }
-                                            <IonLabel style={{marginLeft:'0.5em'}}>{each.name}</IonLabel>
+                                            <IonLabel style={{ marginLeft: '0.5em' }}>{each.name}</IonLabel>
                                         </IonChip>
                                     </IonCol>
                                 )

@@ -24,7 +24,7 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
     let gobletMainstats = gobletStats.map((x: any) => <IonSelectOption key={x.val} value={x.val}> {x.subStats} </IonSelectOption>)
     let mainStats = mainstats.map((x: any) => <IonSelectOption key={x.val} value={x.val}> {x.subStats} </IonSelectOption>)
     const genshindb = require('genshin-db');
-    const [artiList, setartiList] = useState(genshindb.artifacts('name', { matchCategories: true }));
+    const [artiList, setartiList] = useState(genshindb.artifacts('name', { matchCategories: true, verboseCategories:true }));
     const [mainStat, setMainStat] = useState({} as Stat);
     const [stat1, setStat1] = useState({} as Stat);
     const [stat2, setStat2] = useState({} as Stat);
@@ -105,10 +105,9 @@ const Artifacts: React.FC<ContainerProps> = ({ handleChange, position, data }) =
                     >
                         {
                             artiList.map((eachArti: any) => {
-                                if (eachArti !== "Glacier and Snowfield" && eachArti !== "Prayers to the Firmament") {
-                                    let arti = genshindb.artifacts(eachArti);
+                                if (eachArti.name !== "Glacier and Snowfield" && eachArti.name !== "Prayers to the Firmament") {
                                     return (
-                                        <IonSelectOption key={arti.name} value={arti.name}> {arti.name} </IonSelectOption>
+                                        <IonSelectOption key={eachArti.name} value={eachArti.name}> {eachArti.name} </IonSelectOption>
                                     )
                                 }
                             }

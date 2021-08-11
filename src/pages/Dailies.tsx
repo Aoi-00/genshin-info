@@ -3,6 +3,7 @@ import './Dailies.css';
 import React, { Component } from 'react';
 import Materials from '../components/Dailies/Materials';
 import Dates from '../components/Dailies/Dates';
+import paimon from '../assets/paimonTrans.jpeg'
 
 
 var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -34,7 +35,7 @@ export default class Tab1 extends Component {
         <IonHeader>
           <IonToolbar>
             <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
-              <IonImg src={""} />
+              <IonImg src={paimon} />
             </IonAvatar>
             <IonTitle>Daily Mats</IonTitle>
           </IonToolbar>

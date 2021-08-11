@@ -1,6 +1,7 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonAvatar, IonImg } from '@ionic/react'
 import React, { Component } from 'react'
 import Party from '../components/Party'
+import paimon from '../assets/paimonTrans.jpeg';
 
 interface userProps {
     history: any
@@ -17,7 +18,7 @@ export default class Teams extends Component<userProps> {
     componentDidMount() {
         let team1: any[] = [], team2: any[] = [], team3: any[] = [], team4: any[] = [];
         for (var key in localStorage) {
-            if (key.includes('/teams/') && !key.includes('/dmg') && !key.includes('ele'))  {
+            if (key.includes('/teams/') && !key.includes('/dmg') && !key.includes('ele')) {
                 var retrievedObject = localStorage.getItem(`${key}`);
                 if (retrievedObject !== null) {
                     switch (key.charAt(7)) {
@@ -82,7 +83,7 @@ export default class Teams extends Component<userProps> {
                 <IonHeader>
                     <IonToolbar>
                         <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
-                            <IonImg src={""} />
+                            <IonImg src={paimon} />
                         </IonAvatar>
                         <IonTitle>Teams</IonTitle>
                     </IonToolbar>

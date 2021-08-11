@@ -78,7 +78,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     }
 
     function ApplyAttribute(label: string, format: string, number: any) {
-        if (!["cd", "energy", "duration", "stamina", "bonus", "chance","stacks","additional elemental dmg","interval"].some(substring => label.toLowerCase().includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "chance","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => label.toLowerCase().includes(substring))) {
             if (format.includes("Max HP")) {
                 var name = format.split("Max HP")
                 return (format.replace(name[0] + "Max HP", (Number(name[0].replace('%', "")) / 100 * (attribute.lifeStatic + attribute.lifePercentage + attribute.lifeBasic)).toFixed(0).toString()))
@@ -130,7 +130,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('b'):
                 {
                     //apply a = normal atk, b = charged atk, air = plunge
-                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
                         if (name.includes("Plunge")) {
                             let values = number.match(/[0-9]*\.?[0-9]/g);
                             number = Calculate(values, number, 'aBonus')
@@ -152,7 +152,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('e'):
                 {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'eBonus')
@@ -173,7 +173,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
             case ('q'):
                 {
                     //apply ult skill atk bonus, qBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
-                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
+                    if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'qBonus')
@@ -191,7 +191,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
 
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
-        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "shield", "life drain","healing","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "shield", "life drain","healing","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -236,7 +236,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                 Bonus = attribute.physicalBonus
             }
         }
-        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "healing", "shield", "life drain","stacks","additional elemental dmg","interval"].some(substring => name.toLowerCase().includes(substring))) {
+        if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "healing", "shield", "life drain","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {

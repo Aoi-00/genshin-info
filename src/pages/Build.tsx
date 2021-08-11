@@ -1,6 +1,7 @@
 import { IonAvatar, IonBackButton, IonButtons, IonContent, IonHeader, IonImg, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Build.css';
 import StatsCalc from '../components/Build/StatsCalc';
+import paimon from '../assets/paimonTrans.jpeg'
 
 import React, { Component } from 'react'
 import Weapon from '../components/Build/Weapon';
@@ -22,8 +23,8 @@ interface userProps {
 export default class Tab2 extends Component<userProps> {
 
   state = {
-    featherData:{},
-    flowerData:{},
+    featherData: {},
+    flowerData: {},
     sandData: {},
     cupData: {},
     headData: {},
@@ -31,8 +32,8 @@ export default class Tab2 extends Component<userProps> {
     char: {},
     refine: 'r1',
     weapLvl: 1,
-    charLvl:'20',
-    charConst:0,
+    charLvl: '20',
+    charConst: 0,
 
     feather: {},
     flower: {},
@@ -88,7 +89,7 @@ export default class Tab2 extends Component<userProps> {
         })
       }
 
-      if (Object.keys(JSON.parse(retrievedObject).headData).length !== 0) {  
+      if (Object.keys(JSON.parse(retrievedObject).headData).length !== 0) {
         this.setState({
           headData: JSON.parse(retrievedObject).headData
         })
@@ -96,8 +97,8 @@ export default class Tab2 extends Component<userProps> {
 
       this.setState({
         char: JSON.parse(retrievedObject).char,
-        charLvl:JSON.parse(retrievedObject).charLvl,
-        charConst:JSON.parse(retrievedObject).charConst
+        charLvl: JSON.parse(retrievedObject).charLvl,
+        charConst: JSON.parse(retrievedObject).charConst
       })
     }
   }
@@ -109,63 +110,58 @@ export default class Tab2 extends Component<userProps> {
         weap: this.state.weap,
         refine: this.state.refine,
         weapLvl: this.state.weapLvl,
-        charLvl:this.state.charLvl,
-        charConst:this.state.charConst,
+        charLvl: this.state.charLvl,
+        charConst: this.state.charConst,
         flowerData: this.state.flowerData,
         featherData: this.state.featherData,
         cupData: this.state.cupData,
         sandData: this.state.sandData,
         headData: this.state.headData,
-        buildAttributes:this.state.buildAttributes
+        buildAttributes: this.state.buildAttributes
       }
       localStorage.setItem(this.props.location.pathname, JSON.stringify(data))
     }
   }
 
   componentDidUpdate(prevProp: any, prevState: any, snapShot: any) {
-    if (this.state.flowerData !== prevState.flowerData && Object.keys(this.state.flowerData).length !== 0){
+    if (this.state.flowerData !== prevState.flowerData && Object.keys(this.state.flowerData).length !== 0) {
       let data: any = this.state.flowerData
-      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+      this.buildArti(data.mainStat, data.stat1, data.stat2, data.stat3, data.stat4, data.set, data.position)
     }
 
-    if (this.state.featherData !== prevState.featherData && Object.keys(this.state.featherData).length !== 0){
+    if (this.state.featherData !== prevState.featherData && Object.keys(this.state.featherData).length !== 0) {
       let data: any = this.state.featherData
-      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+      this.buildArti(data.mainStat, data.stat1, data.stat2, data.stat3, data.stat4, data.set, data.position)
     }
 
-    if (this.state.sandData !== prevState.sandData && Object.keys(this.state.sandData).length !== 0){
+    if (this.state.sandData !== prevState.sandData && Object.keys(this.state.sandData).length !== 0) {
       let data: any = this.state.sandData
-      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+      this.buildArti(data.mainStat, data.stat1, data.stat2, data.stat3, data.stat4, data.set, data.position)
     }
 
-    if (this.state.cupData !== prevState.cupData && Object.keys(this.state.cupData).length !== 0){
+    if (this.state.cupData !== prevState.cupData && Object.keys(this.state.cupData).length !== 0) {
       let data: any = this.state.cupData
-      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+      this.buildArti(data.mainStat, data.stat1, data.stat2, data.stat3, data.stat4, data.set, data.position)
     }
 
-    if (this.state.headData !== prevState.headData && Object.keys(this.state.headData).length !== 0){
+    if (this.state.headData !== prevState.headData && Object.keys(this.state.headData).length !== 0) {
       let data: any = this.state.headData
-      this.buildArti(data.mainStat,data.stat1,data.stat2,data.stat3,data.stat4,data.set,data.position)
+      this.buildArti(data.mainStat, data.stat1, data.stat2, data.stat3, data.stat4, data.set, data.position)
     }
 
-    if ((this.state.char !== prevState.char && Object.keys(this.state.char).length !== 0) || (this.state.charConst !== prevState.charConst) || (this.state.charLvl !== prevState.charLvl) ) {
+    if ((this.state.char !== prevState.char && Object.keys(this.state.char).length !== 0) || (this.state.charConst !== prevState.charConst) || (this.state.charLvl !== prevState.charLvl)) {
       let charInfo: any = this.state.char;
-      var wepList: any[] = [];
-      let tempWepList = genshindb.weapons(charInfo['weapontype'], { matchCategories: true })
-      tempWepList.forEach((eachWep: any) => {
-        var wepInfo = genshindb.weapons(eachWep)
-        wepList.push(wepInfo)
-      });
+      var wepList: any[] = genshindb.weapons(charInfo['weapontype'], { matchCategories: true, verboseCategories:true });
       this.setState({
         wepList: wepList
       })
       let name;
-      if (charInfo.name === "Aether") {name = "me_geo"}
+      if (charInfo.name === "Aether") { name = "me_geo" }
       else name = charInfo.name
-        let char = new genshin.Character(name.toLowerCase().replace(" ", ""), this.state.charLvl.replace("+",""), this.state.charLvl.includes("+"), this.state.charConst);
-        this.setState({
-          buildChar: char
-        })
+      let char = new genshin.Character(name.toLowerCase().replace(" ", ""), this.state.charLvl.replace("+", ""), this.state.charLvl.includes("+"), this.state.charConst);
+      this.setState({
+        buildChar: char
+      })
     }
 
     if (this.state.weap !== prevState.weap) {
@@ -308,7 +304,7 @@ export default class Tab2 extends Component<userProps> {
         let arti = new genshin.ArtifactBuilder()
           .setName(name)
           .position(position)
-          .mainTag(mainStat.statType, isNaN(["Bonus", "critical", "Percentage", "recharge","cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue)) ? 0 : ["Bonus", "critical", "Percentage", "recharge","cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
+          .mainTag(mainStat.statType, isNaN(["Bonus", "critical", "Percentage", "recharge", "cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue)) ? 0 : ["Bonus", "critical", "Percentage", "recharge", "cure"].some(substring => mainStat.statType.includes(substring)) ? parseFloat(mainStat.statValue) / 100 : parseFloat(mainStat.statValue))
           .tag(stat1.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat1.statType.includes(substring)) ? parseFloat(stat1.statValue) / 100 : parseFloat(stat1.statValue))
           .tag(stat2.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat2.statType.includes(substring)) ? parseFloat(stat2.statValue) / 100 : parseFloat(stat2.statValue))
           .tag(stat3.statType, isNaN(["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue)) ? 0 : ["critical", "Percentage", "recharge"].some(substring => stat3.statType.includes(substring)) ? parseFloat(stat3.statValue) / 100 : parseFloat(stat3.statValue))
@@ -319,7 +315,7 @@ export default class Tab2 extends Component<userProps> {
           [position]: arti
         })
 
-        
+
       }
       catch (err) {
         alert("Cannot build artifact. Please check your artifact input.")
@@ -341,7 +337,7 @@ export default class Tab2 extends Component<userProps> {
               <IonBackButton defaultHref="/teams" />
             </IonButtons>
             <IonAvatar slot="end" style={{ width: '2em', height: '2em', margin: '1rem' }}>
-              <IonImg src={""} />
+              <IonImg src={paimon} />
             </IonAvatar>
             <IonTitle>Damage Calculator</IonTitle>
           </IonToolbar>
@@ -361,15 +357,15 @@ export default class Tab2 extends Component<userProps> {
           </div>
 
           <div>
-            <Artifacts handleChange={this.updateArtiData} position={"flower"} data={this.state.flowerData}/>
+            <Artifacts handleChange={this.updateArtiData} position={"flower"} data={this.state.flowerData} />
             <Artifacts handleChange={this.updateArtiData} position={"feather"} data={this.state.featherData} />
             <Artifacts handleChange={this.updateArtiData} position={"sand"} data={this.state.sandData} />
-            <Artifacts handleChange={this.updateArtiData} position={"cup"}  data={this.state.cupData}/>
-            <Artifacts handleChange={this.updateArtiData} position={"head"}  data={this.state.headData}/>
+            <Artifacts handleChange={this.updateArtiData} position={"cup"} data={this.state.cupData} />
+            <Artifacts handleChange={this.updateArtiData} position={"head"} data={this.state.headData} />
           </div>
 
           <div>
-            <StatsCalc handleChange={this.onChange} char={this.state.char} attribute={this.state.buildAttributes} navigate={this.Navigate} charLvl={this.state.charLvl} charConst = {this.state.charConst} />
+            <StatsCalc handleChange={this.onChange} char={this.state.char} attribute={this.state.buildAttributes} navigate={this.Navigate} charLvl={this.state.charLvl} charConst={this.state.charConst} />
           </div>
 
         </IonContent>

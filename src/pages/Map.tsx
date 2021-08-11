@@ -25,7 +25,7 @@ export default class Map extends Component {
                     </IonHeader>
 
                     <div className="Map">
-                    <iframe title="Teyvat Interactive Map" src="https://webstatic-sea.mihoyo.com/app/ys-map-sea/?lang=en-sg#/map/2?shown_types=&center=-438.00,15.00&zoom=-2.00" width="100%" height="100%"></iframe>
+                    <iframe title="Teyvat Interactive Map" src="https://genshin-impact-map.appsample.com/#/" width="100%" height="100%"></iframe>
                     </div>
                     
 
