@@ -87,6 +87,9 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                 var name = format.split("DEF")
                 return (format.replace(name[0] + "DEF", (Number(name[0].replace('%', "")) / 100 * (attribute.defendStatic + attribute.defendPercentage + attribute.defendBasic)).toFixed(0).toString()))
             }
+            else if (format.toLowerCase().includes("normal")){
+                return format
+            }
             else if (format.includes("%")) {
                 let values = format.match(/[0-9]*\.?[0-9]+%/g);
                 let tempString: any;
@@ -153,6 +156,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
                 {
                     //apply e skill atk bonus, eBonus, search for regeneration/healing (cureEffect = healing, cured = incoming)
                     if (!["cd", "energy", "duration", "stamina", "bonus", "life drain","regeneration","chance","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
+                        if (number.toLowerCase().includes("normal")){return number}
                         let values = number.match(/[0-9]*\.?[0-9]/g);
                         if (!["Healing", "Regeneration"].some(substring => name.includes(substring))) {
                             number = Calculate(values, number, 'eBonus')
@@ -192,6 +196,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     }
     function ApplyCrit(name: string, number: any, crit: boolean) {
         if (!["cd", "energy", "duration", "stamina", "bonus", "regeneration", "shield", "life drain","healing","stacks","additional elemental dmg","interval","dmg reduction"].some(substring => name.toLowerCase().includes(substring))) {
+            if (number.toLowerCase().includes("normal")){return number}
             let values = number.match(/[0-9]*\.?[0-9]/g);
             let newValues = [];
             for (var i in values) {
@@ -206,6 +211,7 @@ const Talents: React.FC<ContainerProps> = ({ char, attribute, level, DMGReductio
     }
 
     function ApplyEleBonus(name: string, number: any, ele: boolean) {
+        if (number.toLowerCase().includes("normal")){return number}
         var Bonus;
         switch (char.element) {
             case ('Anemo'): {
