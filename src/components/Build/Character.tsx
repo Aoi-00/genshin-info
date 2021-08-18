@@ -1,4 +1,4 @@
-import { IonAvatar, IonItem, IonRow, IonSegment, IonSegmentButton } from '@ionic/react'
+import { IonAvatar, IonItem, IonRow, IonSegment, IonSegmentButton, IonToast } from '@ionic/react'
 import React, { useEffect, useState } from 'react'
 import { MDBCol } from "mdbreact";
 import anemo from '../../assets/anemo.jpg'
@@ -28,6 +28,8 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
     const location = useLocation();
     const [ele, setEle] = useState('');
     const [charList, setCharList] = useState(genshindb.characters(ele, { matchCategories: true }))
+    const [showToast1, setShowToast1] = useState(false);
+    const [charName, setChar] = useState("");
     useEffect(() => {
         if (ele === 'geo' || ele === 'anemo' || ele === 'electro') {
             let list = genshindb.characters(ele, { matchCategories: true });
@@ -46,7 +48,7 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
         }
     }, [])
 
-    const prevEle:any = usePrevious(ele);
+    const prevEle: any = usePrevious(ele);
     useEffect(() => {
         if (prevEle?.length !== ele.length) {
             localStorage.setItem(location.pathname + "/ele", JSON.stringify(ele));
@@ -102,9 +104,15 @@ const Character: React.FC<ContainerProps> = ({ handleChange }) => {
                             var charInfo = genshindb.characters(eachChar);
                             return (
                                 <MDBCol key={charInfo.name} size="auto">
-                                    <IonAvatar onClick={(e) => handleChange(charInfo, e)} >
+                                    <IonAvatar onClick={(e) => { handleChange(charInfo, e); setChar(charInfo.name); setShowToast1(true); }} >
                                         <img id={'char'} alt="" src={charInfo.images.icon} />
                                     </IonAvatar>
+                                    <IonToast
+                                        isOpen={showToast1}
+                                        onDidDismiss={() => setShowToast1(false)}
+                                        message={`${charName} selected.`}
+                                        duration={200}
+                                    />
                                 </MDBCol>
                             )
                         })}
